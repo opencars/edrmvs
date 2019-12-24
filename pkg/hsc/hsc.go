@@ -27,8 +27,8 @@ type Registration struct {
 	NStanding    *string `json:"nStanding"`
 	OwnWeight    *string `json:"ownWeight"`
 	RankCategory *string `json:"rankCategory"`
-	TotalWeight *string `json:"totalWeight"`
-	VIN         *string `json:"vin"`
+	TotalWeight  *string `json:"totalWeight"`
+	VIN          *string `json:"vin"`
 }
 
 // API is wrapper to Head Service Center website.
@@ -58,16 +58,14 @@ func (api *API) VehiclePassport(code string) ([]Registration, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
 	info := make([]Registration, 0)
 	if resp.StatusCode != http.StatusOK {
 		return info, nil
 	}
 
-	err = json.NewDecoder(resp.Body).Decode(&info)
-	resp.Body.Close()
-
-	if err != nil {
+	if err = json.NewDecoder(resp.Body).Decode(&info); err != nil {
 		return nil, err
 	}
 

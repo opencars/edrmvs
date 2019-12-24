@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"time"
 
 	_ "github.com/lib/pq"
 
@@ -13,6 +14,7 @@ import (
 	"github.com/opencars/edrmvs/pkg/model"
 	"github.com/opencars/edrmvs/pkg/store"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
+	"github.com/opencars/translit"
 )
 
 func main() {
@@ -33,7 +35,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// TODO: Use translit package.
+	series = translit.ToLatin(series)
 	reg, err := s.Registration().GetLast(series)
 	if err != nil && err != store.RecordNotFound {
 		log.Fatal(err)
@@ -46,16 +48,17 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-	number = 80243
 
 	client := hsc.New(settings.HSC.BaseURL)
-	for i := number; i < 1000000; i++ {
+	for i := number + 1; i < 1000000; i++ {
 		code := fmt.Sprintf("%s%06d", series, i)
 		fmt.Println(code)
 
 		regs, err := client.VehiclePassport(code)
 		if err != nil {
 			fmt.Printf("[warn] Error on code=%s: %s\n", code, err)
+			time.Sleep(30 * time.Second)
+			i--
 			continue
 		}
 
@@ -71,11 +74,11 @@ func main() {
 		obj, err := model.FromHSC(regs[0])
 		if err != nil {
 			fmt.Printf("[warn] FromHSC failed on code=%s: %s\n", code, err)
+			time.Sleep(30 * time.Second)
 			continue
 		}
 
-		err = s.Registration().Create(obj)
-		if err != nil {
+		if err := s.Registration().Create(obj); err != nil {
 			log.Fatal(err)
 		}
 	}

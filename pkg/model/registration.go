@@ -6,6 +6,7 @@ import (
 
 	"github.com/opencars/edrmvs/pkg/hsc"
 	"github.com/opencars/edrmvs/pkg/utils"
+	"github.com/opencars/translit"
 )
 
 // Registration represents database entity for vehicle registration.
@@ -61,6 +62,8 @@ func FromHSC(registration hsc.Registration) (*Registration, error) {
 		return nil, fmt.Errorf("totalWeight: %w", err)
 	}
 
+	translit.ToLatin(registration.SDoc)
+
 	return &Registration{
 		Brand:        registration.Brand,
 		Capacity:     capacity,
@@ -72,8 +75,8 @@ func FromHSC(registration hsc.Registration) (*Registration, error) {
 		MakeYear:     makeYear,
 		Model:        registration.Model,
 		NDoc:         registration.NDoc,
-		SDoc:         registration.SDoc,
-		NRegNew:      registration.NRegNew,
+		SDoc:         translit.ToLatin(registration.SDoc),
+		NRegNew:      translit.ToLatin(registration.NRegNew),
 		NSeating:     nSeating,
 		NStanding:    nStanding,
 		OwnWeight:    ownWeight,

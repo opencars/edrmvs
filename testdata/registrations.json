@@ -1,0 +1,22 @@
+[
+  {
+    "brand": "TESLA",
+    "capacity": null,
+    "color": "ЧОРНИЙ",
+    "dFirstReg": "2016-10-13",
+    "dReg": "2019-06-05",
+    "fuel": "ЕЛЕКТРО",
+    "kind": "ЛЕГКОВИЙ УНІВЕРСАЛ-B",
+    "makeYear": "2016",
+    "model": "MODEL X",
+    "nDoc": "484154",
+    "nRegNew": "АА9359РС",
+    "nSeating": "7",
+    "nStanding": null,
+    "ownWeight": "2485",
+    "rankCategory": "B",
+    "sDoc": "СХН",
+    "totalWeight": "3021",
+    "vin": "5YJXCCE40GF010543"
+  }
+]

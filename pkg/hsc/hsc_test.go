@@ -7,6 +7,8 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -28,13 +30,8 @@ func TestVehiclePassport(t *testing.T) {
 	api := New(server.URL)
 
 	arr, err := api.VehiclePassport("АА9359РС")
-	if err != nil {
-		t.Fail()
-	}
-
-	if arr[0] != registrations[0] {
-		t.Fail()
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, registrations, arr)
 }
 
 func TestMain(m *testing.M) {
@@ -51,7 +48,6 @@ func TestMain(m *testing.M) {
 	}
 
 	registrationsData = string(data)
-
 	if err := json.Unmarshal(data, &registrations); err != nil {
 		fmt.Fprintln(os.Stderr, "Failed to parse JSON")
 		os.Exit(1)
