@@ -1,13 +1,19 @@
 package teststore
 
-// type Store struct {
-// 	registrationRepository *RegistrationRepository
-// }
+import (
+	"github.com/opencars/edrmvs/pkg/store"
+)
 
-// func (s *Store) Registration() store.RegistrationRepository {
-// 	if s.registrationRepository == nil {
-// 		s.registrationRepository = &RegistrationRepository{}
-// 	}
+// Store is postgres wrapper for store.Store.
+type Store struct {
+	registrationRepository *RegistrationRepository
+}
 
-// 	return s.registrationRepository
-// }
+// Registration is responsible for registrations manipulation.
+func (s *Store) Registration() store.RegistrationRepository {
+	if s.registrationRepository == nil {
+		s.registrationRepository = &RegistrationRepository{}
+	}
+
+	return s.registrationRepository
+}

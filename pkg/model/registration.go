@@ -31,6 +31,7 @@ type Registration struct {
 	VIN          *string  `db:"vin" json:"vin"`
 }
 
+// FromHSC returns parsed and prettified registration.
 func FromHSC(registration hsc.Registration) (*Registration, error) {
 	capacity, err := utils.Atoi(registration.Capacity)
 	if err != nil {

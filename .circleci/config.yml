@@ -61,6 +61,7 @@ jobs:
           name: Build Project Binary
           command: |
             go build -o ./bin/extractor ./cmd/extractor/main.go
+            go build -o ./bin/server ./cmd/server/main.go
 
   release:
     docker:

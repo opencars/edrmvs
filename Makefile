@@ -1,5 +1,5 @@
 .PHONY: default all clean
-APPS     := extractor
+APPS     := extractor server
 BLDDIR   := bin
 VERSION  := $(shell cat VERSION)
 

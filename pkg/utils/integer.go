@@ -4,6 +4,7 @@ import (
 	"strconv"
 )
 
+// Atoi converts string to integer.
 func Atoi(lexeme *string) (*int, error) {
 	if lexeme == nil {
 		return nil, nil
@@ -17,6 +18,7 @@ func Atoi(lexeme *string) (*int, error) {
 	return &result, nil
 }
 
+// Atof converts string to float.
 func Atof(lexeme *string) (*float64, error) {
 	if lexeme == nil {
 		return nil, nil

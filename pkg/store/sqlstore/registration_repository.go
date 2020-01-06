@@ -7,10 +7,12 @@ import (
 	"github.com/opencars/edrmvs/pkg/store"
 )
 
+// RegistrationRepository is responsible for registrations manipulation.
 type RegistrationRepository struct {
 	store *Store
 }
 
+// Create adds new record to the database.
 func (r *RegistrationRepository) Create(registration *model.Registration) error {
 	_, err := r.store.db.NamedExec(
 		`INSERT INTO registrations (
@@ -32,6 +34,7 @@ func (r *RegistrationRepository) Create(registration *model.Registration) error 
 	return nil
 }
 
+// FindByNumber returns registrations with specified number.
 func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registration, error) {
 	registrations := make([]model.Registration, 0)
 
@@ -53,8 +56,10 @@ func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registrati
 	return registrations, nil
 }
 
+// FindByCode returns registrations with specified code.
 func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, error) {
 	var registration model.Registration
+
 	err := r.store.db.Get(&registration,
 		`SELECT (
 			brand, capacity, color, d_first_reg, d_reg, fuel, kind,
@@ -67,7 +72,7 @@ func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, e
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, store.RecordNotFound
+		return nil, store.ErrRecordNotFound
 	}
 
 	if err != nil {
@@ -77,6 +82,7 @@ func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, e
 	return &registration, nil
 }
 
+// FindByVIN returns registrations with specified VIN.
 func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, error) {
 	registrations := make([]model.Registration, 0)
 
@@ -98,6 +104,7 @@ func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, er
 	return registrations, nil
 }
 
+// GetLast returns last registration from the database.
 func (r *RegistrationRepository) GetLast(series string) (*model.Registration, error) {
 	var registration model.Registration
 
@@ -113,7 +120,7 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, store.RecordNotFound
+		return nil, store.ErrRecordNotFound
 	}
 
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"github.com/opencars/edrmvs/pkg/model"
 )
 
+// RegistrationRepository is responsible for registrations manipulation.
 type RegistrationRepository interface {
 	Create(registration *model.Registration) error
 	FindByNumber(number string) ([]model.Registration, error)

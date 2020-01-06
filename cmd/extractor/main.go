@@ -37,7 +37,7 @@ func main() {
 
 	series = translit.ToLatin(series)
 	reg, err := s.Registration().GetLast(series)
-	if err != nil && err != store.RecordNotFound {
+	if err != nil && err != store.ErrRecordNotFound {
 		log.Fatal(err)
 	}
 

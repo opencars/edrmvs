@@ -1,27 +1,37 @@
 package teststore
 
-// type RegistrationRepository struct {
-// 	data map[string]*model.Registration
-// }
+import (
+	"github.com/opencars/edrmvs/pkg/model"
+)
 
-// func (r *RegistrationRepository) Create(registration *model.Registration) error {
-// 	r.data[registration.SDoc + registration.NDoc] = registration
+// RegistrationRepository is responsible for registrations manipulation.
+type RegistrationRepository struct {
+	data map[string]*model.Registration
+}
 
-// 	return nil
-// }
+// Create adds new record to the database.
+func (r *RegistrationRepository) Create(registration *model.Registration) error {
+	r.data[registration.SDoc+registration.NDoc] = registration
 
-// func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registration, error) {
+	return nil
+}
 
-// }
+// FindByNumber returns registrations with specified number.
+func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registration, error) {
+	return nil, nil
+}
 
-// func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, error) {
-// 	if registration, ok := r.data[code]; ok {
-// 		return r.data[code], nil
-// 	}
+// FindByCode returns registrations with specified code.
+func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, error) {
+	return nil, nil
+}
 
-// 	return store.RecordNotFound
-// }
+// FindByVIN returns registrations with specified VIN.
+func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, error) {
+	return nil, nil
+}
 
-// func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, error) {
-
-// }
+// GetLast returns last registration from the database.
+func (r *RegistrationRepository) GetLast(series string) (*model.Registration, error) {
+	return nil, nil
+}
