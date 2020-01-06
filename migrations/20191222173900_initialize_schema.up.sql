@@ -13,9 +13,9 @@ CREATE TABLE registrations(
     "n_reg_new"       TEXT NOT NULL,
     "n_seating"       INT,
     "n_standing"      INT,
-    "own_weight"      INT,
+    "own_weight"      REAL,
     "rank_category"   TEXT,
-    "total_weight"    INT,
+    "total_weight"    REAL,
     "vin"             TEXT,
     PRIMARY KEY ("s_doc", "n_doc")
 );

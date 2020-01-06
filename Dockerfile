@@ -15,7 +15,8 @@ RUN go mod download
 COPY . .
 
 RUN export VERSION=$(cat VERSION) && \
-    go build -ldflags "-X github.com/opencars/edrmvs/pkg/version.Version=$VERSION" -o /go/bin/extractor ./cmd/extractor/main.go
+    go build -ldflags "-X github.com/opencars/edrmvs/pkg/version.Version=$VERSION" -o /go/bin/extractor ./cmd/extractor/main.go && \
+    go build -ldflags "-X github.com/opencars/edrmvs/pkg/version.Version=$VERSION" -o /go/bin/server ./cmd/server/main.go
 
 FROM alpine
 
