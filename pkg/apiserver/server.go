@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 
 	"github.com/opencars/edrmvs/pkg/store"
@@ -26,18 +27,22 @@ type server struct {
 	store  store.Store
 }
 
+// ServeHTTP implements http.Handler interface.
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// TODO: Add CORS.
+	origins := handlers.AllowedOrigins([]string{"*"})
+	methods := handlers.AllowedMethods([]string{"GET", "OPTIONS"})
+	headers := handlers.AllowedHeaders([]string{"Api-Key"})
 
-	s.router.ServeHTTP(w, r)
+	cors := handlers.CORS(origins, methods, headers)(s.router)
+	cors.ServeHTTP(w, r)
 }
 
 func (s *server) confgureRoutes() {
-	s.router.Handle("/api/v1/edrmvs/version", version.Handler{})
+	s.router.Handle("/api/v1/edrmvs/version", version.Handler{}).Methods("GET", "OPTIONS")
 
-	s.router.Handle("/api/v1/edrmvs/vin/{vin}", s.registrationByVIN())
-	s.router.Handle("/api/v1/edrmvs/number/{number}", s.registrationByNumber())
-	s.router.Handle("/api/v1/edrmvs/code/{code}", s.registrationByCode())
+	s.router.Handle("/api/v1/edrmvs/vin/{vin}", s.registrationByVIN()).Methods("GET", "OPTIONS")
+	s.router.Handle("/api/v1/edrmvs/number/{number}", s.registrationByNumber()).Methods("GET", "OPTIONS")
+	s.router.Handle("/api/v1/edrmvs/code/{code}", s.registrationByCode()).Methods("GET", "OPTIONS")
 }
 
 func (s *server) registrationByVIN() Handler {
