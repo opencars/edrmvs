@@ -9,6 +9,7 @@ import (
 
 	"github.com/opencars/edrmvs/pkg/store"
 	"github.com/opencars/edrmvs/pkg/version"
+	"github.com/opencars/translit"
 )
 
 func newServer(store store.Store) *server {
@@ -38,16 +39,16 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) confgureRoutes() {
-	s.router.Handle("/api/v1/edrmvs/version", version.Handler{}).Methods("GET", "OPTIONS")
+	s.router.Handle("/api/v1/registrations/version", version.Handler{}).Methods("GET", "OPTIONS")
 
-	s.router.Handle("/api/v1/edrmvs/vin/{vin}", s.registrationByVIN()).Methods("GET", "OPTIONS")
-	s.router.Handle("/api/v1/edrmvs/number/{number}", s.registrationByNumber()).Methods("GET", "OPTIONS")
-	s.router.Handle("/api/v1/edrmvs/code/{code}", s.registrationByCode()).Methods("GET", "OPTIONS")
+	s.router.Handle("/api/v1/registrations", s.registrationByVIN()).Queries("vin", "{vin}").Methods("GET", "OPTIONS")
+	s.router.Handle("/api/v1/registrations", s.registrationByNumber()).Queries("number", "{number}").Methods("GET", "OPTIONS")
+	s.router.Handle("/api/v1/registrations/{code}", s.registrationByCode()).Methods("GET", "OPTIONS")
 }
 
 func (s *server) registrationByVIN() Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		vin := mux.Vars(r)["vin"]
+		vin := r.URL.Query().Get("vin")
 
 		registrations, err := s.store.Registration().FindByVIN(vin)
 		if err != nil {
@@ -64,7 +65,7 @@ func (s *server) registrationByVIN() Handler {
 
 func (s *server) registrationByNumber() Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		number := mux.Vars(r)["number"]
+		number := translit.ToLatin(r.URL.Query().Get("number"))
 
 		registrations, err := s.store.Registration().FindByNumber(number)
 		if err != nil {
