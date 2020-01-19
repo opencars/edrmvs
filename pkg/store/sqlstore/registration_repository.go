@@ -51,6 +51,16 @@ func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registrati
 		return nil, err
 	}
 
+	for i, reg := range registrations {
+		if registrations[i].DReg != nil {
+			*registrations[i].DReg = (*reg.DReg)[:10]
+		}
+
+		if registrations[i].DFirstReg != nil {
+			*registrations[i].DFirstReg = (*reg.DFirstReg)[:10]
+		}
+	}
+
 	return registrations, nil
 }
 
@@ -75,6 +85,14 @@ func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, e
 		return nil, err
 	}
 
+	if registration.DReg != nil {
+		*registration.DReg = (*registration.DReg)[:10]
+	}
+
+	if registration.DFirstReg != nil {
+		*registration.DFirstReg = (*registration.DFirstReg)[:10]
+	}
+
 	return &registration, nil
 }
 
@@ -90,6 +108,16 @@ func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, er
 		WHERE vin = $1`,
 		vin,
 	)
+
+	for i, reg := range registrations {
+		if registrations[i].DReg != nil {
+			*registrations[i].DReg = (*reg.DReg)[:10]
+		}
+
+		if registrations[i].DFirstReg != nil {
+			*registrations[i].DFirstReg = (*reg.DFirstReg)[:10]
+		}
+	}
 
 	if err != nil {
 		return nil, err
@@ -119,6 +147,14 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 
 	if err != nil {
 		return nil, err
+	}
+
+	if registration.DReg != nil {
+		*registration.DReg = (*registration.DReg)[:10]
+	}
+
+	if registration.DFirstReg != nil {
+		*registration.DFirstReg = (*registration.DFirstReg)[:10]
 	}
 
 	return &registration, nil
