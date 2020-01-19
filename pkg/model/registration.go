@@ -22,6 +22,7 @@ type Registration struct {
 	Model        *string  `db:"model" json:"model"`
 	NDoc         string   `db:"n_doc" json:"n_doc"`
 	SDoc         string   `db:"s_doc" json:"s_doc"`
+	Code         string   `db:"-" json:"code"`
 	NRegNew      string   `db:"n_reg_new" json:"n_reg_new"`
 	NSeating     *int     `db:"n_seating" json:"n_seating"`
 	NStanding    *int     `db:"n_standing" json:"n_standing"`
