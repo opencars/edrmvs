@@ -29,4 +29,4 @@ COPY ./config ./config
 
 EXPOSE 8080
 
-ENTRYPOINT ["./server"]
+CMD ["./server"]
