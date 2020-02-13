@@ -1,9 +1,9 @@
 [database]
 network = "tcp"
-host = "localhost"
+host = "db.opencars.app"
 port = 5432
 username = "postgres"
-password = "postgres"
+password = "MzOTyhO7UTcJkWZi"
 database = "edrmvs"
 pool = 10
 

@@ -39,11 +39,9 @@ func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registrati
 	registrations := make([]model.Registration, 0)
 
 	err := r.store.db.Select(&registrations,
-		`SELECT (
-			brand, capacity, color, d_first_reg, d_reg, fuel, kind,
-			make_year, model, n_doc, s_doc, n_reg_new, n_seating,
-			n_standing, own_weight, rank_category, total_weight, vin
-		)
+		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind,
+			    make_year, model, n_doc, s_doc, n_reg_new, n_seating,
+			    n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
 		WHERE n_reg_new = $1`,
 		number,
@@ -51,6 +49,16 @@ func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registrati
 
 	if err != nil {
 		return nil, err
+	}
+
+	for i, reg := range registrations {
+		if registrations[i].DReg != nil {
+			*registrations[i].DReg = (*reg.DReg)[:10]
+		}
+
+		if registrations[i].DFirstReg != nil {
+			*registrations[i].DFirstReg = (*reg.DFirstReg)[:10]
+		}
 	}
 
 	return registrations, nil
@@ -61,13 +69,11 @@ func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, e
 	var registration model.Registration
 
 	err := r.store.db.Get(&registration,
-		`SELECT (
-			brand, capacity, color, d_first_reg, d_reg, fuel, kind,
-			make_year, model, n_doc, s_doc, n_reg_new, n_seating,
-			n_standing, own_weight, rank_category, total_weight, vin
-		)
+		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind,
+			    make_year, model, CONCAT(n_doc, s_doc) as code, n_reg_new, n_seating,
+			    n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
-		WHERE CONCAT(s_doc, n_doc) = $1`,
+		WHERE code = $1`,
 		code,
 	)
 
@@ -79,6 +85,14 @@ func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, e
 		return nil, err
 	}
 
+	if registration.DReg != nil {
+		*registration.DReg = (*registration.DReg)[:10]
+	}
+
+	if registration.DFirstReg != nil {
+		*registration.DFirstReg = (*registration.DFirstReg)[:10]
+	}
+
 	return &registration, nil
 }
 
@@ -87,15 +101,23 @@ func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, er
 	registrations := make([]model.Registration, 0)
 
 	err := r.store.db.Select(&registrations,
-		`SELECT (
-			brand, capacity, color, d_first_reg, d_reg, fuel, kind,
-			make_year, model, n_doc, s_doc, n_reg_new, n_seating,
-			n_standing, own_weight, rank_category, total_weight, vin
-		)
+		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind,
+                make_year, model, CONCAT(n_doc, s_doc) as code, n_reg_new, n_seating,
+                n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
 		WHERE vin = $1`,
 		vin,
 	)
+
+	for i, reg := range registrations {
+		if registrations[i].DReg != nil {
+			*registrations[i].DReg = (*reg.DReg)[:10]
+		}
+
+		if registrations[i].DFirstReg != nil {
+			*registrations[i].DFirstReg = (*reg.DFirstReg)[:10]
+		}
+	}
 
 	if err != nil {
 		return nil, err
@@ -111,11 +133,12 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 	err := r.store.db.Get(&registration,
 		`SELECT
 			brand, capacity, color, d_first_reg, d_reg, fuel,
-			kind, make_year, model, n_doc, s_doc, n_reg_new, n_seating,
+			kind, make_year, model, CONCAT(n_doc, s_doc) as code, n_reg_new, n_seating,
 			n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
 		WHERE s_doc = $1
-		ORDER BY s_doc, n_doc DESC LIMIT 1`,
+		ORDER BY s_doc, n_doc DESC
+		LIMIT 1`,
 		series,
 	)
 
@@ -125,6 +148,14 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 
 	if err != nil {
 		return nil, err
+	}
+
+	if registration.DReg != nil {
+		*registration.DReg = (*registration.DReg)[:10]
+	}
+
+	if registration.DFirstReg != nil {
+		*registration.DFirstReg = (*registration.DFirstReg)[:10]
 	}
 
 	return &registration, nil

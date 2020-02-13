@@ -28,3 +28,5 @@ COPY --from=build /go/bin/ ./
 COPY ./config ./config
 
 EXPOSE 8080
+
+CMD ["./server"]

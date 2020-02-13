@@ -14,17 +14,18 @@ type Registration struct {
 	Brand        *string  `db:"brand" json:"brand"`
 	Capacity     *int     `db:"capacity" json:"capacity"`
 	Color        string   `db:"color" json:"color"`
-	DFirstReg    *string  `db:"d_first_reg" json:"d_first_reg"`
-	DReg         *string  `db:"d_reg" json:"d_reg"`
+	DFirstReg    *string  `db:"d_first_reg" json:"first_reg_date"`
+	DReg         *string  `db:"d_reg" json:"date"`
 	Fuel         *string  `db:"fuel" json:"fuel"`
 	Kind         *string  `db:"kind" json:"kind"`
-	MakeYear     int      `db:"make_year" json:"make_year"`
+	MakeYear     int      `db:"make_year" json:"year"`
 	Model        *string  `db:"model" json:"model"`
-	NDoc         string   `db:"n_doc" json:"n_doc"`
-	SDoc         string   `db:"s_doc" json:"s_doc"`
-	NRegNew      string   `db:"n_reg_new" json:"n_reg_new"`
-	NSeating     *int     `db:"n_seating" json:"n_seating"`
-	NStanding    *int     `db:"n_standing" json:"n_standing"`
+	NDoc         string   `db:"n_doc" json:"-"`
+	SDoc         string   `db:"s_doc" json:"-"`
+	Code         string   `db:"-" json:"code"`
+	NRegNew      string   `db:"n_reg_new" json:"number"`
+	NSeating     *int     `db:"n_seating" json:"num_seating"`
+	NStanding    *int     `db:"n_standing" json:"num_standing"`
 	OwnWeight    *float64 `db:"own_weight" json:"own_weight"`
 	RankCategory *string  `db:"rank_category" json:"rank_category"`
 	TotalWeight  *float64 `db:"total_weight" json:"total_weight"`
