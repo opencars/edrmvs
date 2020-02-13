@@ -56,7 +56,7 @@ func (s *server) registrationByVIN() Handler {
 		}
 
 		for i, reg := range registrations {
-			registrations[i].Code = reg.NDoc + reg.SDoc
+			registrations[i].Code = reg.SDoc + reg.NDoc
 		}
 
 		if err := json.NewEncoder(w).Encode(registrations); err != nil {
@@ -77,7 +77,7 @@ func (s *server) registrationByNumber() Handler {
 		}
 
 		for i, reg := range registrations {
-			registrations[i].Code = reg.NDoc + reg.SDoc
+			registrations[i].Code = reg.SDoc + reg.NDoc
 		}
 
 		if err := json.NewEncoder(w).Encode(registrations); err != nil {
@@ -97,7 +97,7 @@ func (s *server) registrationByCode() Handler {
 			return err
 		}
 
-		registration.Code = registration.NDoc + registration.SDoc
+		registration.Code = registration.SDoc + registration.NDoc
 		if err := json.NewEncoder(w).Encode(registration); err != nil {
 			return err
 		}

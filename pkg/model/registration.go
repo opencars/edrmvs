@@ -11,25 +11,25 @@ import (
 
 // Registration represents database entity for vehicle registration.
 type Registration struct {
-	Brand        *string  `db:"brand" json:"brand"`
-	Capacity     *int     `db:"capacity" json:"capacity"`
+	Brand        *string  `db:"brand" json:"brand,omitempty"`
+	Capacity     *int     `db:"capacity" json:"capacity,omitempty"`
 	Color        string   `db:"color" json:"color"`
-	DFirstReg    *string  `db:"d_first_reg" json:"first_reg_date"`
-	DReg         *string  `db:"d_reg" json:"date"`
-	Fuel         *string  `db:"fuel" json:"fuel"`
-	Kind         *string  `db:"kind" json:"kind"`
+	DFirstReg    *string  `db:"d_first_reg" json:"first_reg_date,omitempty"`
+	DReg         *string  `db:"d_reg" json:"date,omitempty"`
+	Fuel         *string  `db:"fuel" json:"fuel,omitempty"`
+	Kind         *string  `db:"kind" json:"kind,omitempty"`
 	MakeYear     int      `db:"make_year" json:"year"`
-	Model        *string  `db:"model" json:"model"`
+	Model        *string  `db:"model" json:"model,omitempty"`
 	NDoc         string   `db:"n_doc" json:"-"`
 	SDoc         string   `db:"s_doc" json:"-"`
 	Code         string   `db:"-" json:"code"`
 	NRegNew      string   `db:"n_reg_new" json:"number"`
-	NSeating     *int     `db:"n_seating" json:"num_seating"`
-	NStanding    *int     `db:"n_standing" json:"num_standing"`
-	OwnWeight    *float64 `db:"own_weight" json:"own_weight"`
-	RankCategory *string  `db:"rank_category" json:"rank_category"`
-	TotalWeight  *float64 `db:"total_weight" json:"total_weight"`
-	VIN          *string  `db:"vin" json:"vin"`
+	NSeating     *int     `db:"n_seating" json:"num_seating,omitempty"`
+	NStanding    *int     `db:"n_standing" json:"num_standing,omitempty"`
+	OwnWeight    *float64 `db:"own_weight" json:"own_weight,omitempty"`
+	RankCategory *string  `db:"rank_category" json:"rank_category,omitempty"`
+	TotalWeight  *float64 `db:"total_weight" json:"total_weight,omitempty"`
+	VIN          *string  `db:"vin" json:"vin,omitempty"`
 }
 
 // FromHSC returns parsed and prettified registration.
