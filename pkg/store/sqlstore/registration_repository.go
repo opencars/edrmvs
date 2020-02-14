@@ -133,7 +133,7 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 	err := r.store.db.Get(&registration,
 		`SELECT
 			brand, capacity, color, d_first_reg, d_reg, fuel,
-			kind, make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
+			kind, make_year, model, s_doc, n_doc, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
 			n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
 		WHERE s_doc = $1
