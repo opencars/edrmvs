@@ -14,18 +14,18 @@ type Registration struct {
 	Brand        *string  `db:"brand" json:"brand,omitempty"`
 	Capacity     *int     `db:"capacity" json:"capacity,omitempty"`
 	Color        string   `db:"color" json:"color"`
-	DFirstReg    *string  `db:"d_first_reg" json:"first_reg_date,omitempty"`
-	DReg         *string  `db:"d_reg" json:"date,omitempty"`
+	FirstRegDate *string  `db:"d_first_reg" json:"first_reg_date,omitempty"`
+	Date         *string  `db:"d_reg" json:"date,omitempty"`
 	Fuel         *string  `db:"fuel" json:"fuel,omitempty"`
 	Kind         *string  `db:"kind" json:"kind,omitempty"`
-	MakeYear     int      `db:"make_year" json:"year"`
+	Year         int      `db:"make_year" json:"year"`
 	Model        *string  `db:"model" json:"model,omitempty"`
 	NDoc         string   `db:"n_doc" json:"-"`
 	SDoc         string   `db:"s_doc" json:"-"`
 	Code         string   `db:"-" json:"code"`
-	NRegNew      string   `db:"n_reg_new" json:"number"`
-	NSeating     *int     `db:"n_seating" json:"num_seating,omitempty"`
-	NStanding    *int     `db:"n_standing" json:"num_standing,omitempty"`
+	Number       string   `db:"n_reg_new" json:"number"`
+	NumSeating   *int     `db:"n_seating" json:"num_seating,omitempty"`
+	NumStanding  *int     `db:"n_standing" json:"num_standing,omitempty"`
 	OwnWeight    *float64 `db:"own_weight" json:"own_weight,omitempty"`
 	RankCategory *string  `db:"rank_category" json:"rank_category,omitempty"`
 	TotalWeight  *float64 `db:"total_weight" json:"total_weight,omitempty"`
@@ -70,17 +70,17 @@ func FromHSC(registration hsc.Registration) (*Registration, error) {
 		Brand:        registration.Brand,
 		Capacity:     capacity,
 		Color:        registration.Color,
-		DFirstReg:    registration.DFirstReg,
-		DReg:         registration.DReg,
+		FirstRegDate: registration.DFirstReg,
+		Date:         registration.DReg,
 		Fuel:         registration.Fuel,
 		Kind:         registration.Kind,
-		MakeYear:     makeYear,
+		Year:         makeYear,
 		Model:        registration.Model,
 		NDoc:         registration.NDoc,
 		SDoc:         translit.ToLatin(registration.SDoc),
-		NRegNew:      translit.ToLatin(registration.NRegNew),
-		NSeating:     nSeating,
-		NStanding:    nStanding,
+		Number:       translit.ToLatin(registration.NRegNew),
+		NumSeating:   nSeating,
+		NumStanding:  nStanding,
 		OwnWeight:    ownWeight,
 		RankCategory: registration.RankCategory,
 		TotalWeight:  totalWeight,

@@ -52,12 +52,12 @@ func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registrati
 	}
 
 	for i, reg := range registrations {
-		if registrations[i].DReg != nil {
-			*registrations[i].DReg = (*reg.DReg)[:10]
+		if registrations[i].Date != nil {
+			*registrations[i].Date = (*reg.Date)[:10]
 		}
 
-		if registrations[i].DFirstReg != nil {
-			*registrations[i].DFirstReg = (*reg.DFirstReg)[:10]
+		if registrations[i].FirstRegDate != nil {
+			*registrations[i].FirstRegDate = (*reg.FirstRegDate)[:10]
 		}
 	}
 
@@ -85,12 +85,12 @@ func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, e
 		return nil, err
 	}
 
-	if registration.DReg != nil {
-		*registration.DReg = (*registration.DReg)[:10]
+	if registration.Date != nil {
+		*registration.Date = (*registration.Date)[:10]
 	}
 
-	if registration.DFirstReg != nil {
-		*registration.DFirstReg = (*registration.DFirstReg)[:10]
+	if registration.FirstRegDate != nil {
+		*registration.FirstRegDate = (*registration.FirstRegDate)[:10]
 	}
 
 	return &registration, nil
@@ -110,12 +110,12 @@ func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, er
 	)
 
 	for i, reg := range registrations {
-		if registrations[i].DReg != nil {
-			*registrations[i].DReg = (*reg.DReg)[:10]
+		if registrations[i].Date != nil {
+			*registrations[i].Date = (*reg.Date)[:10]
 		}
 
-		if registrations[i].DFirstReg != nil {
-			*registrations[i].DFirstReg = (*reg.DFirstReg)[:10]
+		if registrations[i].FirstRegDate != nil {
+			*registrations[i].FirstRegDate = (*reg.FirstRegDate)[:10]
 		}
 	}
 
@@ -150,12 +150,12 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 		return nil, err
 	}
 
-	if registration.DReg != nil {
-		*registration.DReg = (*registration.DReg)[:10]
+	if registration.Date != nil {
+		*registration.Date = (*registration.Date)[:10]
 	}
 
-	if registration.DFirstReg != nil {
-		*registration.DFirstReg = (*registration.DFirstReg)[:10]
+	if registration.FirstRegDate != nil {
+		*registration.FirstRegDate = (*registration.FirstRegDate)[:10]
 	}
 
 	return &registration, nil
