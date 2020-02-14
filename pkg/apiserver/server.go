@@ -3,6 +3,7 @@ package apiserver
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -55,10 +56,6 @@ func (s *server) registrationByVIN() Handler {
 			return err
 		}
 
-		for i, reg := range registrations {
-			registrations[i].Code = reg.SDoc + reg.NDoc
-		}
-
 		if err := json.NewEncoder(w).Encode(registrations); err != nil {
 			return err
 		}
@@ -69,15 +66,11 @@ func (s *server) registrationByVIN() Handler {
 
 func (s *server) registrationByNumber() Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		number := translit.ToLatin(r.URL.Query().Get("number"))
+		number := translit.ToLatin(strings.ToUpper(r.URL.Query().Get("number")))
 
 		registrations, err := s.store.Registration().FindByNumber(number)
 		if err != nil {
 			return err
-		}
-
-		for i, reg := range registrations {
-			registrations[i].Code = reg.SDoc + reg.NDoc
 		}
 
 		if err := json.NewEncoder(w).Encode(registrations); err != nil {
@@ -90,14 +83,13 @@ func (s *server) registrationByNumber() Handler {
 
 func (s *server) registrationByCode() Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		code := mux.Vars(r)["code"]
+		code := translit.ToLatin(strings.ToUpper(mux.Vars(r)["code"]))
 
 		registration, err := s.store.Registration().FindByCode(code)
 		if err != nil {
 			return err
 		}
 
-		registration.Code = registration.SDoc + registration.NDoc
 		if err := json.NewEncoder(w).Encode(registration); err != nil {
 			return err
 		}
