@@ -19,9 +19,11 @@ import (
 
 func main() {
 	var path, series string
+	var from int64
 
 	flag.StringVar(&path, "config", "./config/config.toml", "Path to the configuration file")
 	flag.StringVar(&series, "series", "", "Series of the registrations")
+	flag.Int64Var(&from, "from", -1, "Use custom from")
 
 	flag.Parse()
 
@@ -42,7 +44,9 @@ func main() {
 	}
 
 	var number int64 = 0
-	if reg != nil {
+	if from != -1 {
+		number = from
+	} else if reg != nil {
 		number, err = strconv.ParseInt(reg.NDoc, 10, 64)
 		if err != nil {
 			log.Fatal(err)
@@ -50,7 +54,7 @@ func main() {
 	}
 
 	client := hsc.New(settings.HSC.BaseURL)
-	for i := number + 1; i < 1000000; i++ {
+	for i := number; i < 1000000; i++ {
 		code := fmt.Sprintf("%s%06d", series, i)
 		fmt.Println(code)
 
