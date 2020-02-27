@@ -23,7 +23,7 @@ func (r *RegistrationRepository) Create(registration *model.Registration) error 
 			:brand, :capacity, :color, :d_first_reg, :d_reg, :fuel, :kind,
 		 	:make_year, :model, :n_doc, :s_doc, :n_reg_new, :n_seating,
  		 	:n_standing, :own_weight, :rank_category, :total_weight, :vin
-		)`,
+		) ON CONFLICT DO NOTHING`,
 		registration,
 	)
 
@@ -159,4 +159,24 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 	}
 
 	return &registration, nil
+}
+
+// AllSeries returns list of all known series.
+func (r *RegistrationRepository) AllSeries() ([]string, error) {
+	codes := make([]string, 0)
+
+	err := r.store.db.Select(&codes,
+		`SELECT s_doc FROM registrations
+		GROUP BY s_doc`,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, store.ErrRecordNotFound
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return codes, nil
 }
