@@ -11,4 +11,5 @@ type RegistrationRepository interface {
 	FindByCode(code string) (*model.Registration, error)
 	FindByVIN(vin string) ([]model.Registration, error)
 	GetLast(series string) (*model.Registration, error)
+	AllSeries() ([]string, error)
 }
