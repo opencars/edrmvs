@@ -35,3 +35,8 @@ func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, er
 func (r *RegistrationRepository) GetLast(series string) (*model.Registration, error) {
 	return nil, nil
 }
+
+// AllSeries returns list of all known series.
+func (r *RegistrationRepository) AllSeries() ([]string, error) {
+	return nil, nil
+}
