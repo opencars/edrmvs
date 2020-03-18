@@ -12,7 +12,7 @@ import (
 )
 
 func Start(settings *config.Settings) error {
-	store, err := sqlstore.New(settings)
+	store, err := sqlstore.New(&settings.DB)
 	if err != nil {
 		return err
 	}

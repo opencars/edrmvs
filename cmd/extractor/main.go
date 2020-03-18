@@ -32,7 +32,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s, err := sqlstore.New(settings)
+	s, err := sqlstore.New(&settings.DB)
 	if err != nil {
 		log.Fatal(err)
 	}

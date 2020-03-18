@@ -86,6 +86,10 @@ func (s *server) registrationByCode() Handler {
 		code := translit.ToLatin(strings.ToUpper(mux.Vars(r)["code"]))
 
 		registration, err := s.store.Registration().FindByCode(code)
+		if err == store.ErrRecordNotFound {
+			return ErrNotFound
+		}
+
 		if err != nil {
 			return err
 		}
