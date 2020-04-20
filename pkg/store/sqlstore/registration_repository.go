@@ -105,22 +105,23 @@ func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, er
                 make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
                 n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
-		WHERE vin = $1`,
+		WHERE vin = $1
+		ORDER BY d_reg DESC`,
 		vin,
 	)
 
+	if err != nil {
+		return nil, err
+	}
+
 	for i, reg := range registrations {
-		if registrations[i].Date != nil {
+		if registrations[i].Date != nil && len(*reg.FirstRegDate) >= 10 {
 			*registrations[i].Date = (*reg.Date)[:10]
 		}
 
-		if registrations[i].FirstRegDate != nil {
+		if registrations[i].FirstRegDate != nil && len(*reg.FirstRegDate) >= 10 {
 			*registrations[i].FirstRegDate = (*reg.FirstRegDate)[:10]
 		}
-	}
-
-	if err != nil {
-		return nil, err
 	}
 
 	return registrations, nil
@@ -165,11 +166,7 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 func (r *RegistrationRepository) AllSeries() ([]string, error) {
 	codes := make([]string, 0)
 
-	err := r.store.db.Select(&codes,
-		`SELECT s_doc FROM registrations
-		GROUP BY s_doc`,
-	)
-
+	err := r.store.db.Select(&codes, `SELECT s_doc FROM registrations GROUP BY s_doc`)
 	if err == sql.ErrNoRows {
 		return nil, store.ErrRecordNotFound
 	}

@@ -1,10 +1,11 @@
 package sqlstore_test
 
 import (
+	"testing"
+
 	"github.com/opencars/edrmvs/pkg/model"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestRegistrationRepository_Create(t *testing.T) {
@@ -24,7 +25,7 @@ func TestRegistrationRepository_FindByNumber(t *testing.T) {
 
 	actual, err := s.Registration().FindByNumber(registration.Number)
 	assert.NoError(t, err)
-	assert.Len(t, actual,1)
+	assert.Len(t, actual, 1)
 	assert.Equal(t, registration.Code, actual[0].Code)
 	assert.Equal(t, registration.Number, actual[0].Number)
 	assert.Equal(t, registration.VIN, actual[0].VIN)
@@ -54,7 +55,7 @@ func TestRegistrationRepository_FindByVIN(t *testing.T) {
 
 	actual, err := s.Registration().FindByVIN(*registration.VIN)
 	assert.NoError(t, err)
-	assert.Len(t, actual,1)
+	assert.Len(t, actual, 1)
 	assert.Equal(t, registration.Code, actual[0].Code)
 	assert.Equal(t, registration.Number, actual[0].Number)
 	assert.Equal(t, registration.VIN, actual[0].VIN)
