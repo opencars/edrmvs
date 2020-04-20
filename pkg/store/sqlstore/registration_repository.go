@@ -43,7 +43,8 @@ func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registrati
 			    make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
 			    n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
-		WHERE n_reg_new = $1`,
+		WHERE n_reg_new = $1
+		ORDER BY d_reg DESC`,
 		number,
 	)
 
@@ -73,7 +74,8 @@ func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, e
 			    make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
 			    n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
-		WHERE CONCAT(s_doc, n_doc) = $1`,
+		WHERE CONCAT(s_doc, n_doc) = $1
+		ORDER BY d_reg DESC`,
 		code,
 	)
 
