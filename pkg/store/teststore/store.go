@@ -9,6 +9,11 @@ type Store struct {
 	registrationRepository *RegistrationRepository
 }
 
+// New returns store instance.
+func New() store.Store {
+	return &Store{}
+}
+
 // Registration is responsible for registrations manipulation.
 func (s *Store) Registration() store.RegistrationRepository {
 	if s.registrationRepository == nil {

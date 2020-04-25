@@ -9,7 +9,6 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/opencars/edrmvs/pkg/store"
-	"github.com/opencars/edrmvs/pkg/version"
 	"github.com/opencars/translit"
 )
 
@@ -19,7 +18,7 @@ func newServer(store store.Store) *server {
 		store:  store,
 	}
 
-	srv.confgureRoutes()
+	srv.configureRoutes()
 
 	return &srv
 }
@@ -36,18 +35,11 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	headers := handlers.AllowedHeaders([]string{"Api-Key"})
 
 	cors := handlers.CORS(origins, methods, headers)(s.router)
-	cors.ServeHTTP(w, r)
+	compressed := handlers.CompressHandler(cors)
+	compressed.ServeHTTP(w, r)
 }
 
-func (s *server) confgureRoutes() {
-	s.router.Handle("/api/v1/registrations/version", version.Handler{}).Methods("GET", "OPTIONS")
-
-	s.router.Handle("/api/v1/registrations", s.registrationByVIN()).Queries("vin", "{vin}").Methods("GET", "OPTIONS")
-	s.router.Handle("/api/v1/registrations", s.registrationByNumber()).Queries("number", "{number}").Methods("GET", "OPTIONS")
-	s.router.Handle("/api/v1/registrations/{code}", s.registrationByCode()).Methods("GET", "OPTIONS")
-}
-
-func (s *server) registrationByVIN() Handler {
+func (s *server) FindByVIN() Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		vin := r.URL.Query().Get("vin")
 
@@ -64,7 +56,7 @@ func (s *server) registrationByVIN() Handler {
 	}
 }
 
-func (s *server) registrationByNumber() Handler {
+func (s *server) FindByNumber() Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		number := translit.ToLatin(strings.ToUpper(r.URL.Query().Get("number")))
 
@@ -81,7 +73,7 @@ func (s *server) registrationByNumber() Handler {
 	}
 }
 
-func (s *server) registrationByCode() Handler {
+func (s *server) FindByCode() Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		code := translit.ToLatin(strings.ToUpper(mux.Vars(r)["code"]))
 
