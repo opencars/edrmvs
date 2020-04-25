@@ -64,7 +64,7 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 
 // AllSeries returns list of all known series.
 func (r *RegistrationRepository) AllSeries() ([]string, error) {
-	series := make(map[string]struct{}, 0)
+	series := make(map[string]struct{})
 
 	for _, v := range r.data {
 		if _, ok := series[v.SDoc]; !ok {
