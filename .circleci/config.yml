@@ -53,7 +53,7 @@ jobs:
           name: "Lint Code"
           command: |
             wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.27.0
-            golangci-lint run
+            ./bin/golangci-lint run
 
       - run:
           name: Build Project Binary
