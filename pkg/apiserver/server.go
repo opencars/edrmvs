@@ -32,7 +32,7 @@ type server struct {
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	origins := handlers.AllowedOrigins([]string{"*"})
 	methods := handlers.AllowedMethods([]string{"GET", "OPTIONS"})
-	headers := handlers.AllowedHeaders([]string{"Api-Key"})
+	headers := handlers.AllowedHeaders([]string{"Api-Key", "X-Api-Key"})
 
 	cors := handlers.CORS(origins, methods, headers)(s.router)
 	compressed := handlers.CompressHandler(cors)
