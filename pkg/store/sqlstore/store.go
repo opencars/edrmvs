@@ -30,9 +30,8 @@ func (s *Store) Registration() store.RegistrationRepository {
 // New returns new instance of store.
 func New(conf *config.Database) (*Store, error) {
 	info := fmt.Sprintf(
-		"host=%s port=%d user=%s dbname=%s sslmode=disable password=%s",
-		conf.Host, conf.Port, conf.Username,
-		conf.Database, conf.Password,
+		"host=%s port=%d user=%s dbname=%s sslmode=%s password=%s",
+		conf.Host, conf.Port, conf.Username, conf.Database, conf.SSLMode, conf.Password,
 	)
 
 	db, err := sqlx.Connect("postgres", info)
