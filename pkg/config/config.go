@@ -8,13 +8,12 @@ type Settings struct {
 }
 
 type Database struct {
-	Network  string `toml:"network"`
 	Host     string `toml:"host"`
 	Port     int    `toml:"port"`
 	Username string `toml:"username"`
 	Password string `toml:"password"`
 	Database string `toml:"database"`
-	Pool     int    `toml:"pool"`
+	SSLMode  string `toml:"ssl_mode"`
 }
 
 type HSC struct {

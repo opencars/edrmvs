@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/opencars/translit"
+
 	"github.com/opencars/edrmvs/pkg/hsc"
 	"github.com/opencars/edrmvs/pkg/utils"
-	"github.com/opencars/translit"
 )
 
 // Registration represents database entity for vehicle registration.

@@ -8,8 +8,9 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 
-	"github.com/opencars/edrmvs/pkg/store"
 	"github.com/opencars/translit"
+
+	"github.com/opencars/edrmvs/pkg/store"
 )
 
 func newServer(store store.Store) *server {
@@ -48,11 +49,7 @@ func (s *server) FindByVIN() Handler {
 			return err
 		}
 
-		if err := json.NewEncoder(w).Encode(registrations); err != nil {
-			return err
-		}
-
-		return nil
+		return json.NewEncoder(w).Encode(registrations)
 	}
 }
 
@@ -65,11 +62,7 @@ func (s *server) FindByNumber() Handler {
 			return err
 		}
 
-		if err := json.NewEncoder(w).Encode(registrations); err != nil {
-			return err
-		}
-
-		return nil
+		return json.NewEncoder(w).Encode(registrations)
 	}
 }
 
@@ -86,10 +79,6 @@ func (s *server) FindByCode() Handler {
 			return err
 		}
 
-		if err := json.NewEncoder(w).Encode(registration); err != nil {
-			return err
-		}
-
-		return nil
+		return json.NewEncoder(w).Encode(registration)
 	}
 }

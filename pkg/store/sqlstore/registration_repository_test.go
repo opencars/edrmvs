@@ -3,9 +3,10 @@ package sqlstore_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/opencars/edrmvs/pkg/model"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestRegistrationRepository_Create(t *testing.T) {

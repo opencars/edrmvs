@@ -1,11 +1,10 @@
 [database]
-network = "tcp"
 host = "127.0.0.1"
 port = 5432
 username = "postgres"
-password = ""
-database = "edrmvs_test"
-pool = 10
+password = "password"
+database = "edrmvs"
+ssl_mode = "disable"
 
 [hsc]
 base_url = "http://api.hsc.gov.ua"

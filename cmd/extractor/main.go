@@ -9,12 +9,13 @@ import (
 
 	_ "github.com/lib/pq"
 
+	"github.com/opencars/translit"
+
 	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/opencars/edrmvs/pkg/hsc"
 	"github.com/opencars/edrmvs/pkg/model"
 	"github.com/opencars/edrmvs/pkg/store"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
-	"github.com/opencars/translit"
 )
 
 func main() {
@@ -43,7 +44,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var number int64 = 0
+	var number int64
 	if from != -1 {
 		number = from
 	} else if reg != nil {

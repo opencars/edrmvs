@@ -19,7 +19,7 @@ docker-compose up -Vd postgres
 Run sql migrations
 
 ```sh
-migrate -source file://migrations -database postgres://postgres:@127.0.0.1/edrmvs_test\?sslmode=disable up
+migrate -source file://migrations -database postgres://postgres:password@127.0.0.1/edrmvs\?sslmode=disable up
 ```
 
 Run the web server
@@ -39,7 +39,7 @@ docker-compose up -Vd postgres
 Run sql migrations
 
 ```sh
-migrate -source file://migrations -database postgres://postgres:@127.0.0.1/edrmvs_test\?sslmode=disable up
+migrate -source file://migrations -database postgres://postgres:password@127.0.0.1/edrmvs\?sslmode=disable up
 ```
 
 Run tests

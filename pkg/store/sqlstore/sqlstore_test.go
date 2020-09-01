@@ -16,8 +16,9 @@ func TestMain(m *testing.M) {
 		Host:     os.Getenv("DATABASE_HOST"),
 		Port:     5432,
 		Username: "postgres",
-		Password: os.Getenv("DATABASE_PASSWORD"),
-		Database: "edrmvs_test",
+		Password: "password",
+		Database: "edrmvs",
+		SSLMode:  "disable",
 	}
 
 	if conf.Host == "" {
