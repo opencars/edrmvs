@@ -22,7 +22,7 @@ func main() {
 	var path, series string
 	var from int64
 
-	flag.StringVar(&path, "config", "./config/config.toml", "Path to the configuration file")
+	flag.StringVar(&path, "config", "./config/config.yaml", "Path to the configuration file")
 	flag.StringVar(&series, "series", "", "Series of the registrations")
 	flag.Int64Var(&from, "from", -1, "Use custom from")
 
