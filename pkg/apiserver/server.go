@@ -7,9 +7,9 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-
 	"github.com/opencars/translit"
 
+	"github.com/opencars/edrmvs/pkg/handler"
 	"github.com/opencars/edrmvs/pkg/store"
 )
 
@@ -40,9 +40,12 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	compressed.ServeHTTP(w, r)
 }
 
-func (s *server) FindByVIN() Handler {
+func (s *server) FindByVIN() handler.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		vin := r.URL.Query().Get("vin")
+		if vin == "" {
+			return handler.ErrNotFound
+		}
 
 		registrations, err := s.store.Registration().FindByVIN(vin)
 		if err != nil {
@@ -53,7 +56,7 @@ func (s *server) FindByVIN() Handler {
 	}
 }
 
-func (s *server) FindByNumber() Handler {
+func (s *server) FindByNumber() handler.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		number := translit.ToLatin(strings.ToUpper(r.URL.Query().Get("number")))
 
@@ -66,13 +69,13 @@ func (s *server) FindByNumber() Handler {
 	}
 }
 
-func (s *server) FindByCode() Handler {
+func (s *server) FindByCode() handler.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		code := translit.ToLatin(strings.ToUpper(mux.Vars(r)["code"]))
 
 		registration, err := s.store.Registration().FindByCode(code)
 		if err == store.ErrRecordNotFound {
-			return ErrNotFound
+			return handler.ErrNotFound
 		}
 
 		if err != nil {

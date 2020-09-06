@@ -3,45 +3,45 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"strconv"
 	"time"
-
-	_ "github.com/lib/pq"
 
 	"github.com/opencars/translit"
 
 	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/opencars/edrmvs/pkg/hsc"
+	"github.com/opencars/edrmvs/pkg/logger"
 	"github.com/opencars/edrmvs/pkg/model"
 	"github.com/opencars/edrmvs/pkg/store"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
 )
 
 func main() {
-	var path, series string
+	var configPath, series string
 	var from int64
 
-	flag.StringVar(&path, "config", "./config/config.yaml", "Path to the configuration file")
+	flag.StringVar(&configPath, "config", "./config/config.yaml", "Path to the configuration file")
 	flag.StringVar(&series, "series", "", "Series of the registrations")
 	flag.Int64Var(&from, "from", -1, "Use custom from")
 
 	flag.Parse()
 
-	settings, err := config.New(path)
+	conf, err := config.New(configPath)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatalf("failed read config: %v", err)
 	}
 
-	s, err := sqlstore.New(&settings.DB)
+	logger.NewLogger(logger.LogLevel(conf.Log.Level), conf.Log.Mode == "dev")
+
+	s, err := sqlstore.New(&conf.DB)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatalf("store: %v", err)
 	}
 
 	series = translit.ToLatin(series)
 	reg, err := s.Registration().GetLast(series)
 	if err != nil && err != store.ErrRecordNotFound {
-		log.Fatal(err)
+		logger.Fatalf("store: last registration: %v", err)
 	}
 
 	var number int64
@@ -50,41 +50,49 @@ func main() {
 	} else if reg != nil {
 		number, err = strconv.ParseInt(reg.NDoc, 10, 64)
 		if err != nil {
-			log.Fatal(err)
+			logger.Fatalf("convert registration number: %v", err)
 		}
 	}
 
-	client := hsc.New(settings.HSC.BaseURL)
+	client := hsc.New(conf.HSC.BaseURL)
 	for i := number; i < 1000000; i++ {
 		code := fmt.Sprintf("%s%06d", series, i)
-		fmt.Println(code)
+
+		l := logger.WithFields(logger.Fields{
+			"code": code,
+		})
+
+		l.Debugf("sending request")
 
 		regs, err := client.VehiclePassport(code)
 		if err != nil {
-			fmt.Printf("[warn] Error on code=%s: %s\n", code, err)
+			l.Errorf("request failed: %v", err)
+			l.Debugf("sleep for 30s and then retry")
 			time.Sleep(30 * time.Second)
 			i--
 			continue
 		}
 
 		if len(regs) > 1 {
-			fmt.Printf("[warn] Too many regs on code=%s\n", code)
+			l.Errorf("too many registrations detected: %d", len(regs))
 			continue
 		}
 
 		if len(regs) == 0 {
+			l.Debugf("no registrations detected")
 			continue
 		}
 
 		obj, err := model.FromHSC(regs[0])
 		if err != nil {
-			fmt.Printf("[warn] FromHSC failed on code=%s: %s\n", code, err)
+			l.Errorf("convert: %s", err)
+			l.Debugf("sleep for 30s and then retry")
 			time.Sleep(30 * time.Second)
 			continue
 		}
 
 		if err := s.Registration().Create(obj); err != nil {
-			log.Fatal(err)
+			l.Fatalf("save registration: %v", err)
 		}
 	}
 }
