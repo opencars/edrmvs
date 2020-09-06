@@ -2,8 +2,10 @@ package sqlstore
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 
 	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/opencars/edrmvs/pkg/store"
@@ -38,6 +40,11 @@ func New(conf *config.Database) (*Store, error) {
 	if err != nil {
 		return nil, fmt.Errorf("connection failed: %w", err)
 	}
+
+	db.SetConnMaxIdleTime(time.Minute)
+	db.SetConnMaxLifetime(30 * time.Minute)
+	db.SetMaxIdleConns(5)
+	db.SetMaxOpenConns(10)
 
 	return &Store{
 		db: db,

@@ -1,7 +1,9 @@
-package apiserver
+package handler
+
+import "net/http"
 
 var (
-	ErrNotFound = NewError(404, "not found")
+	ErrNotFound = NewError(http.StatusNotFound, "record.not_found")
 )
 
 // Error represents a handler error. It provides methods for a HTTP status

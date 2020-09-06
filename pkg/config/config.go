@@ -7,8 +7,24 @@ import (
 )
 
 type Settings struct {
-	DB  Database `yaml:"database"`
-	HSC HSC      `yaml:"hsc"`
+	Server Server   `yaml:"server"`
+	Log    Log      `yaml:"log"`
+	DB     Database `yaml:"database"`
+	HSC    HSC      `yaml:"hsc"`
+}
+
+// Server represents settings for creating http server.
+type Server struct {
+	ShutdownTimeout Duration `yaml:"shutdown_timeout"`
+	ReadTimeout     Duration `yaml:"read_timeout"`
+	WriteTimeout    Duration `yaml:"write_timeout"`
+	IdleTimeout     Duration `yaml:"idle_timeout"`
+}
+
+// Log represents settings for application logger.
+type Log struct {
+	Level string `yaml:"level"`
+	Mode  string `yaml:"mode"`
 }
 
 type Database struct {
