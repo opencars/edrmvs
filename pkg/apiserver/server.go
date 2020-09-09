@@ -43,7 +43,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (s *server) FindByVIN() handler.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		vin := r.URL.Query().Get("vin")
-		if vin == "" {
+		if len(vin) < 6 {
 			return handler.ErrNotFound
 		}
 
@@ -59,6 +59,9 @@ func (s *server) FindByVIN() handler.Handler {
 func (s *server) FindByNumber() handler.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		number := translit.ToLatin(strings.ToUpper(r.URL.Query().Get("number")))
+		if len(number) < 6 {
+			return handler.ErrNotFound
+		}
 
 		registrations, err := s.store.Registration().FindByNumber(number)
 		if err != nil {
@@ -72,6 +75,9 @@ func (s *server) FindByNumber() handler.Handler {
 func (s *server) FindByCode() handler.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		code := translit.ToLatin(strings.ToUpper(mux.Vars(r)["code"]))
+		if len(code) != 9 {
+			return handler.ErrNotFound
+		}
 
 		registration, err := s.store.Registration().FindByCode(code)
 		if err == store.ErrRecordNotFound {
