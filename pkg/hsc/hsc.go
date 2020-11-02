@@ -1,60 +1,99 @@
 package hsc
 
 import (
+	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 
-	jsoniter "github.com/json-iterator/go"
+	"github.com/opencars/edrmvs/pkg/config"
 )
 
-var json = jsoniter.ConfigFastest
+const (
+	username = "username"
+	password = "password"
+)
 
-// Registration contains details of vehicle registration.
+type RegistrationStatus struct {
+	StatusID int    `json:"statusId"`
+	Status   string `json:"status"`
+}
+
 type Registration struct {
-	Brand        *string `json:"brand"`
-	Capacity     *string `json:"capacity"`
-	Color        string  `json:"color"`
-	DFirstReg    *string `json:"dFirstReg"`
-	DReg         *string `json:"dReg"`
-	Fuel         *string `json:"fuel"`
-	Kind         *string `json:"kind"`
-	MakeYear     string  `json:"makeYear"`
-	Model        *string `json:"model"`
-	NDoc         string  `json:"nDoc"`
-	SDoc         string  `json:"sDoc"`
-	NRegNew      string  `json:"nRegNew"`
-	NSeating     *string `json:"nSeating"`
-	NStanding    *string `json:"nStanding"`
-	OwnWeight    *string `json:"ownWeight"`
-	RankCategory *string `json:"rankCategory"`
-	TotalWeight  *string `json:"totalWeight"`
-	VIN          *string `json:"vin"`
+	PaperID        json.Number        `json:"paperId"`
+	CarID          json.Number        `json:"carId"`
+	LicencePlate   string             `json:"licencePlate"`
+	MakeYear       int                `json:"makeYear"`
+	Brand          *string            `json:"brand"`
+	Model          *string            `json:"model"`
+	CommercialDesc string             `json:"commercialDesc"`
+	Vin            string             `json:"vin"`
+	TotalWeight    *string            `json:"totalWeight"`
+	OwnWeight      *string            `json:"ownWeight"`
+	Category       *string            `json:"category"`
+	Capacity       *string            `json:"capacity"`
+	Fuel           *string            `json:"fuel"`
+	Color          string             `json:"color"`
+	Note           string             `json:"note"`
+	Series         string             `json:"seria"`
+	Number         string             `json:"number"`
+	Status         RegistrationStatus `json:"status"`
+	Date           *string            `json:"dreg"`
+	FirstDate      *string            `json:"dfirstReg"`
+	EndDate        interface{}        `json:"dend"`
+	NChassis       *string            `json:"nchassis"`
+	NSeating       *string            `json:"nseating"`
+	NStanding      *string            `json:"nstandup"`
+}
+
+type Session struct {
+	AccessToken  string `json:"access_token"`
+	TokenType    string `json:"token_type"`
+	RefreshToken string `json:"refresh_token"`
+	ExpiresIn    int    `json:"expires_in"`
+	Scope        string `json:"scope"`
+	JTI          string `json:"jti"`
 }
 
 // API is wrapper to Head Service Center website.
 type API struct {
+	client  *http.Client
 	baseURL string
+
+	username string
+	password string
 }
 
 // New creates an instance of API wrapper.
-func New(uri string) *API {
-	api := new(API)
-
-	api.baseURL = uri
-
-	return api
+func New(conf *config.HSC) *API {
+	return &API{
+		client:   &http.Client{},
+		baseURL:  conf.BaseURL,
+		username: conf.Username,
+		password: conf.Password,
+	}
 }
 
 // VehiclePassport sends GET request to Head Service Center.
 // Code is identifier of vehicle registration certificate.
 // Returns array of vehicles registration details.
-func (api *API) VehiclePassport(code string) ([]Registration, error) {
+func (api *API) VehiclePassport(ctx context.Context, token string, code string) ([]Registration, error) {
 	uri := fmt.Sprintf(
-		"%s/gateway-edrmvs/api/verification/spr/%s/%s",
+		"%s/sprlics-service/sprlics?seria=%s&number=%s",
 		api.baseURL, code[:3], code[3:],
 	)
 
-	resp, err := http.Get(uri)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err := api.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -70,4 +109,42 @@ func (api *API) VehiclePassport(code string) ([]Registration, error) {
 	}
 
 	return info, nil
+}
+
+func (api *API) Authorize(ctx context.Context) (*Session, error) {
+	uri := fmt.Sprintf(
+		"%s/auth-server/oauth/token",
+		api.baseURL,
+	)
+
+	data := make(url.Values)
+	data.Set(username, api.username)
+	data.Set(password, api.password)
+	data.Set("grant_type", "password")
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, uri, strings.NewReader(data.Encode()))
+	if err != nil {
+		return nil, err
+	}
+
+	req.SetBasicAuth("opendata_cl_id_nopd", "open_secret_encrypt_nopd")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+
+	resp, err := api.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, errors.New("session: failed to authorize")
+	}
+
+	var session Session
+	if err = json.NewDecoder(resp.Body).Decode(&session); err != nil {
+		return nil, err
+	}
+
+	return &session, nil
 }

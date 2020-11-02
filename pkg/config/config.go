@@ -7,10 +7,11 @@ import (
 )
 
 type Settings struct {
-	Server Server   `yaml:"server"`
-	Log    Log      `yaml:"log"`
-	DB     Database `yaml:"database"`
-	HSC    HSC      `yaml:"hsc"`
+	Server    Server    `yaml:"server"`
+	Log       Log       `yaml:"log"`
+	DB        Database  `yaml:"database"`
+	HSC       HSC       `yaml:"hsc"`
+	Extractor Extractor `yaml:"extractor"`
 }
 
 // Server represents settings for creating http server.
@@ -37,7 +38,14 @@ type Database struct {
 }
 
 type HSC struct {
-	BaseURL string `yaml:"base_url"`
+	BaseURL  string `yaml:"base_url"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+}
+
+type Extractor struct {
+	Delay   Duration `yaml:"delay"`
+	BackOff Duration `yaml:"backoff"`
 }
 
 // New reads application configuration from specified file path.

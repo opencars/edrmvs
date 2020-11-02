@@ -1,6 +1,8 @@
 package hsc
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -8,6 +10,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -21,15 +24,19 @@ func TestVehiclePassport(t *testing.T) {
 	server := httptest.NewServer(
 		http.HandlerFunc(
 			func(w http.ResponseWriter, r *http.Request) {
-				fmt.Fprintln(w, string(registrationsData))
+				fmt.Fprintln(w, registrationsData)
 			},
 		),
 	)
 	defer server.Close()
 
-	api := New(server.URL)
+	api := New(&config.HSC{
+		BaseURL:  server.URL,
+		Username: "username",
+		Password: "password",
+	})
 
-	arr, err := api.VehiclePassport("АА9359РС")
+	arr, err := api.VehiclePassport(context.Background(), "", "АА9359РС")
 	assert.NoError(t, err)
 	assert.Equal(t, registrations, arr)
 }

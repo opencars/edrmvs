@@ -16,5 +16,11 @@ database:
   database: "edrmvs"
   ssl_mode: "disable"
 
+extractor:
+  backoff: "1m"
+  delay: "1s"
+
 hsc:
-  base_url: "http://api.hsc.gov.ua"
+  base_url: "https://mainapi.hsc.gov.ua"
+  username: "opendata"
+  password: "open_pass_bcrypt_data"
