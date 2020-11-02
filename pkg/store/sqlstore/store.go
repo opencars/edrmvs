@@ -1,6 +1,7 @@
 package sqlstore
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -27,6 +28,15 @@ func (s *Store) Registration() store.RegistrationRepository {
 	}
 
 	return s.registrationRepository
+}
+
+func (s *Store) Health(ctx context.Context) error {
+	_, err := s.db.ExecContext(ctx, `SELECT 1`)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // New returns new instance of store.

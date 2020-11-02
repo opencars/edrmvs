@@ -1,6 +1,7 @@
 package teststore
 
 import (
+	"context"
 	"github.com/opencars/edrmvs/pkg/store"
 )
 
@@ -21,4 +22,9 @@ func (s *Store) Registration() store.RegistrationRepository {
 	}
 
 	return s.registrationRepository
+}
+
+
+func (s *Store) Health(_ context.Context) error {
+	return nil
 }

@@ -1,17 +1,32 @@
-package apiserver
+package http
 
 import (
 	"encoding/json"
 	"net/http"
+	"runtime"
 	"strings"
+	"time"
 
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/opencars/translit"
 
 	"github.com/opencars/edrmvs/pkg/handler"
 	"github.com/opencars/edrmvs/pkg/store"
+	"github.com/opencars/edrmvs/pkg/version"
 )
+
+const (
+	// MaxImageSize equals to 5 MB.
+	MaxImageSize = 5 << 20
+
+	// ClientTimeOut equals to 10 seconds.
+	ClientTimeOut = 10 * time.Second
+)
+
+type server struct {
+	router *mux.Router
+	store  store.Store
+}
 
 func newServer(store store.Store) *server {
 	srv := server{
@@ -19,25 +34,37 @@ func newServer(store store.Store) *server {
 		store:  store,
 	}
 
-	srv.configureRoutes()
+	srv.configureRouter()
 
 	return &srv
 }
 
-type server struct {
-	router *mux.Router
-	store  store.Store
+func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.router.ServeHTTP(w, r)
 }
 
-// ServeHTTP implements http.Handler interface.
-func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	origins := handlers.AllowedOrigins([]string{"*"})
-	methods := handlers.AllowedMethods([]string{"GET", "OPTIONS"})
-	headers := handlers.AllowedHeaders([]string{"Api-Key", "X-Api-Key"})
+func (*server) Version() handler.Handler {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		v := struct {
+			Version string `json:"version"`
+			Go      string `json:"go"`
+		}{
+			Version: version.Version,
+			Go:      runtime.Version(),
+		}
 
-	cors := handlers.CORS(origins, methods, headers)(s.router)
-	compressed := handlers.CompressHandler(cors)
-	compressed.ServeHTTP(w, r)
+		return json.NewEncoder(w).Encode(v)
+	}
+}
+
+func (s *server) Health() handler.Handler {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		if err := s.store.Health(r.Context()); err != nil {
+			return err
+		}
+
+		return nil
+	}
 }
 
 func (s *server) FindByVIN() handler.Handler {

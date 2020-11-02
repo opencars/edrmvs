@@ -1,4 +1,4 @@
-package apiserver
+package http
 
 import (
 	"context"
@@ -13,6 +13,7 @@ import (
 	"github.com/opencars/edrmvs/pkg/store"
 )
 
+// Start starts the server with specified store.
 func Start(ctx context.Context, addr string, conf *config.Server, store store.Store) error {
 	s := newServer(store)
 

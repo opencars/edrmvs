@@ -1,6 +1,7 @@
 package store
 
 import (
+	"context"
 	"errors"
 )
 
@@ -12,4 +13,5 @@ var (
 // Store is an aggregation of repositories.
 type Store interface {
 	Registration() RegistrationRepository
+	Health(ctx context.Context) error
 }
