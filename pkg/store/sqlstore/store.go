@@ -9,28 +9,14 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/opencars/edrmvs/pkg/config"
-	"github.com/opencars/edrmvs/pkg/store"
 )
 
 // Store is postgres wrapper for store.Store.
-type Store struct {
+type RegistrationStore struct {
 	db *sqlx.DB
-
-	registrationRepository *RegistrationRepository
 }
 
-// Registration is responsible for registrations manipulation.
-func (s *Store) Registration() store.RegistrationRepository {
-	if s.registrationRepository == nil {
-		s.registrationRepository = &RegistrationRepository{
-			store: s,
-		}
-	}
-
-	return s.registrationRepository
-}
-
-func (s *Store) Health(ctx context.Context) error {
+func (s *RegistrationStore) Health(ctx context.Context) error {
 	_, err := s.db.ExecContext(ctx, `SELECT 1`)
 	if err != nil {
 		return err
@@ -40,7 +26,7 @@ func (s *Store) Health(ctx context.Context) error {
 }
 
 // New returns new instance of store.
-func New(conf *config.Database) (*Store, error) {
+func New(conf *config.Database) (*RegistrationStore, error) {
 	info := fmt.Sprintf(
 		"host=%s port=%d user=%s dbname=%s sslmode=%s password=%s",
 		conf.Host, conf.Port, conf.Username, conf.Database, conf.SSLMode, conf.Password,
@@ -56,7 +42,7 @@ func New(conf *config.Database) (*Store, error) {
 	db.SetMaxIdleConns(5)
 	db.SetMaxOpenConns(10)
 
-	return &Store{
+	return &RegistrationStore{
 		db: db,
 	}, nil
 }

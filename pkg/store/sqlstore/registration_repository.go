@@ -1,20 +1,18 @@
 package sqlstore
 
 import (
+	"context"
 	"database/sql"
+	"errors"
 
-	"github.com/opencars/edrmvs/pkg/model"
-	"github.com/opencars/edrmvs/pkg/store"
+	"github.com/opencars/edrmvs/pkg/domain"
 )
 
-// RegistrationRepository is responsible for registrations manipulation.
-type RegistrationRepository struct {
-	store *Store
-}
-
 // Create adds new record to the database.
-func (r *RegistrationRepository) Create(registration *model.Registration) error {
-	_, err := r.store.db.NamedExec(
+func (s *RegistrationStore) Create(ctx context.Context, registration *domain.Registration) error {
+	record := convertFromDomain(registration)
+
+	_, err := s.db.NamedExecContext(ctx,
 		`INSERT INTO registrations (
 			brand, capacity, color, d_first_reg, d_reg, fuel, kind,
 			make_year, model, n_doc, s_doc, n_reg_new, n_seating,
@@ -24,7 +22,7 @@ func (r *RegistrationRepository) Create(registration *model.Registration) error 
 		 	:make_year, :model, :n_doc, :s_doc, :n_reg_new, :n_seating,
  		 	:n_standing, :own_weight, :rank_category, :total_weight, :vin
 		) ON CONFLICT DO NOTHING`,
-		registration,
+		record,
 	)
 
 	if err != nil {
@@ -35,10 +33,10 @@ func (r *RegistrationRepository) Create(registration *model.Registration) error 
 }
 
 // FindByNumber returns registrations with specified number.
-func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registration, error) {
-	registrations := make([]model.Registration, 0)
+func (s *RegistrationStore) FindByNumber(ctx context.Context, number string) ([]domain.Registration, error) {
+	records := make([]Registration, 0)
 
-	err := r.store.db.Select(&registrations,
+	err := s.db.SelectContext(ctx, &records,
 		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind,
 			    make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
 			    n_standing, own_weight, rank_category, total_weight, vin
@@ -52,24 +50,19 @@ func (r *RegistrationRepository) FindByNumber(number string) ([]model.Registrati
 		return nil, err
 	}
 
-	for i, reg := range registrations {
-		if registrations[i].Date != nil {
-			*registrations[i].Date = (*reg.Date)[:10]
-		}
-
-		if registrations[i].FirstRegDate != nil {
-			*registrations[i].FirstRegDate = (*reg.FirstRegDate)[:10]
-		}
+	result := make([]domain.Registration, 0)
+	for i := range records {
+		result = append(result, *convertToDomain(&records[i]))
 	}
 
-	return registrations, nil
+	return result, nil
 }
 
 // FindByCode returns registrations with specified code.
-func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, error) {
-	var registration model.Registration
+func (s *RegistrationStore) FindByCode(ctx context.Context, code string) (*domain.Registration, error) {
+	var record Registration
 
-	err := r.store.db.Get(&registration,
+	err := s.db.GetContext(ctx, &record,
 		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind,
 			    make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
 			    n_standing, own_weight, rank_category, total_weight, vin
@@ -80,29 +73,21 @@ func (r *RegistrationRepository) FindByCode(code string) (*model.Registration, e
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, store.ErrRecordNotFound
+		return nil, domain.ErrNotFound
 	}
 
 	if err != nil {
 		return nil, err
 	}
 
-	if registration.Date != nil {
-		*registration.Date = (*registration.Date)[:10]
-	}
-
-	if registration.FirstRegDate != nil {
-		*registration.FirstRegDate = (*registration.FirstRegDate)[:10]
-	}
-
-	return &registration, nil
+	return convertToDomain(&record), nil
 }
 
 // FindByVIN returns registrations with specified VIN.
-func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, error) {
-	registrations := make([]model.Registration, 0)
+func (s *RegistrationStore) FindByVIN(ctx context.Context, vin string) ([]domain.Registration, error) {
+	records := make([]Registration, 0)
 
-	err := r.store.db.Select(&registrations,
+	err := s.db.SelectContext(ctx, &records,
 		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind,
                 make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
                 n_standing, own_weight, rank_category, total_weight, vin
@@ -116,24 +101,19 @@ func (r *RegistrationRepository) FindByVIN(vin string) ([]model.Registration, er
 		return nil, err
 	}
 
-	for i, reg := range registrations {
-		if registrations[i].Date != nil && len(*reg.FirstRegDate) >= 10 {
-			*registrations[i].Date = (*reg.Date)[:10]
-		}
-
-		if registrations[i].FirstRegDate != nil && len(*reg.FirstRegDate) >= 10 {
-			*registrations[i].FirstRegDate = (*reg.FirstRegDate)[:10]
-		}
+	result := make([]domain.Registration, 0)
+	for i := range records {
+		result = append(result, *convertToDomain(&records[i]))
 	}
 
-	return registrations, nil
+	return result, nil
 }
 
 // GetLast returns last registration from the database.
-func (r *RegistrationRepository) GetLast(series string) (*model.Registration, error) {
-	var registration model.Registration
+func (s *RegistrationStore) FindLastBySeries(ctx context.Context, series string) (*domain.Registration, error) {
+	var record Registration
 
-	err := r.store.db.Get(&registration,
+	err := s.db.GetContext(ctx, &record,
 		`SELECT
 			brand, capacity, color, d_first_reg, d_reg, fuel,
 			kind, make_year, model, s_doc, n_doc, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
@@ -145,32 +125,24 @@ func (r *RegistrationRepository) GetLast(series string) (*model.Registration, er
 		series,
 	)
 
-	if err == sql.ErrNoRows {
-		return nil, store.ErrRecordNotFound
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, domain.ErrNotFound
 	}
 
 	if err != nil {
 		return nil, err
 	}
 
-	if registration.Date != nil {
-		*registration.Date = (*registration.Date)[:10]
-	}
-
-	if registration.FirstRegDate != nil {
-		*registration.FirstRegDate = (*registration.FirstRegDate)[:10]
-	}
-
-	return &registration, nil
+	return convertToDomain(&record), nil
 }
 
 // AllSeries returns list of all known series.
-func (r *RegistrationRepository) AllSeries() ([]string, error) {
+func (s *RegistrationStore) AllSeries(ctx context.Context) ([]string, error) {
 	codes := make([]string, 0)
 
-	err := r.store.db.Select(&codes, `SELECT s_doc FROM registrations GROUP BY s_doc`)
-	if err == sql.ErrNoRows {
-		return nil, store.ErrRecordNotFound
+	err := s.db.SelectContext(ctx, &codes, `SELECT s_doc FROM registrations GROUP BY s_doc`)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, domain.ErrNotFound
 	}
 
 	if err != nil {

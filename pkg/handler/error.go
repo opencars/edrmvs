@@ -3,7 +3,10 @@ package handler
 import "net/http"
 
 var (
-	ErrNotFound = NewError(http.StatusNotFound, "record.not_found")
+	ErrNotFound  = NewError(http.StatusNotFound, "record.not_found")
+	ErrBadNumber = NewError(http.StatusBadRequest, "request.number.invalid")
+	ErrBadVIN    = NewError(http.StatusBadRequest, "request.vin.invalid")
+	ErrBadCode   = NewError(http.StatusBadRequest, "request.code.invalid")
 )
 
 // Error represents a handler error. It provides methods for a HTTP status

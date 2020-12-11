@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"github.com/opencars/edrmvs/pkg/domain"
 	"io"
 	"net/http"
 	"os"
@@ -10,16 +11,15 @@ import (
 
 	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/opencars/edrmvs/pkg/logger"
-	"github.com/opencars/edrmvs/pkg/store"
 )
 
 // Start starts the server with specified store.
-func Start(ctx context.Context, addr string, conf *config.Server, store store.Store) error {
+func Start(ctx context.Context, addr string, conf *config.Server, store domain.RegistrationStore) error {
 	s := newServer(store)
 
 	srv := http.Server{
 		Addr:           addr,
-		Handler:        handlers.CustomLoggingHandler(os.Stdout, handlers.ProxyHeaders(s), logFormatter),
+		Handler:        handlers.CustomLoggingHandler(os.Stdout, handlers.ProxyHeaders(s.router), logFormatter),
 		ReadTimeout:    conf.ReadTimeout.Duration,
 		WriteTimeout:   conf.WriteTimeout.Duration,
 		IdleTimeout:    conf.IdleTimeout.Duration,
