@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/opencars/edrmvs/pkg/config"
 )
@@ -57,6 +58,10 @@ type Session struct {
 	ExpiresIn    int    `json:"expires_in"`
 	Scope        string `json:"scope"`
 	JTI          string `json:"jti"`
+}
+
+func (s *Session) ExpAt() time.Time {
+	return time.Now().Add(time.Second * time.Duration(s.ExpiresIn))
 }
 
 // API is wrapper to Head Service Center website.
