@@ -3,7 +3,7 @@ package hsc
 import (
 	"context"
 	"strconv"
-	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/opencars/edrmvs/pkg/domain"
@@ -19,9 +19,7 @@ var (
 type Provider struct {
 	api *API
 
-	m       sync.RWMutex
-	session *Session
-	expAt   time.Time
+	s atomic.Value
 }
 
 func NewProvider(api *API) *Provider {
@@ -31,23 +29,12 @@ func NewProvider(api *API) *Provider {
 }
 
 func (p *Provider) FindByCode(ctx context.Context, code string) ([]domain.Registration, error) {
-	p.m.Lock()
-	if !p.expAt.After(time.Now()) {
-
-		session, err := p.api.Authorize(ctx)
-		if err != nil {
-			return nil, err
-		}
-
-		p.expAt = time.Now().Add(time.Second * time.Duration(session.ExpiresIn))
-		p.session = session
+	token, err := p.token(ctx)
+	if err != nil {
+		return nil, err
 	}
-	p.m.Unlock()
 
-	p.m.RLock()
-	defer p.m.RUnlock()
-
-	registrations, err := p.api.VehiclePassport(ctx, p.session.AccessToken, code)
+	registrations, err := p.api.VehiclePassport(ctx, token, code)
 	if err != nil {
 		return nil, err
 	}
@@ -64,6 +51,22 @@ func (p *Provider) FindByCode(ctx context.Context, code string) ([]domain.Regist
 	}
 
 	return result, nil
+}
+
+func (p *Provider) token(ctx context.Context) (string, error) {
+	if session, ok := p.s.Load().(*Session); ok {
+		if session.ExpAt().Before(time.Now()) {
+			return session.AccessToken, nil
+		}
+	}
+
+	newSession, err := p.api.Authorize(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	p.s.Store(newSession)
+	return newSession.AccessToken, nil
 }
 
 func convert(r *Registration) (*domain.Registration, error) {
