@@ -16,7 +16,7 @@ import (
 type server struct {
 	router *mux.Router
 
-	svc domain.RegistrationStore
+	svc domain.RegistrationService
 }
 
 func newServer(svc domain.RegistrationStore) *server {
@@ -89,10 +89,6 @@ func (s *server) FindByCode() handler.Handler {
 		registration, err := s.svc.FindByCode(r.Context(), mux.Vars(r)["code"])
 		if errors.Is(err, domain.ErrBadCode) {
 			return handler.ErrBadCode
-		}
-
-		if err != nil {
-			return err
 		}
 
 		if err != nil {
