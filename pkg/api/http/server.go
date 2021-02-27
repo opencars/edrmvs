@@ -19,7 +19,7 @@ type server struct {
 	svc domain.RegistrationService
 }
 
-func newServer(svc domain.RegistrationStore) *server {
+func newServer(svc domain.RegistrationService) *server {
 	srv := server{
 		router: mux.NewRouter(),
 		svc:    svc,
@@ -54,9 +54,9 @@ func (s *server) Health() handler.Handler {
 	}
 }
 
-func (s *server) FindByVIN() handler.Handler {
+func (s *server) FindByVIN(v2 bool) handler.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		registrations, err := s.svc.FindByVIN(r.Context(), r.URL.Query().Get("vin"))
+		registrations, err := s.svc.FindByVIN(r.Context(), r.URL.Query().Get("vin"), v2)
 		if errors.Is(err, domain.ErrBadVIN) {
 			return handler.ErrBadVIN
 		}

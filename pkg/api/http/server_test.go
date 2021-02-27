@@ -100,7 +100,7 @@ func TestServer_FindByVIN(t *testing.T) {
 	for i := range tests {
 		t.Run(tests[i].name, func(t *testing.T) {
 			svc := mocks.NewMockRegistrationService(ctrl)
-			svc.EXPECT().FindByVIN(gomock.Any(), tests[i].vin).Return(tests[i].registrations, tests[i].wantErr)
+			svc.EXPECT().FindByVIN(gomock.Any(), tests[i].vin, false).Return(tests[i].registrations, tests[i].wantErr)
 
 			url := fmt.Sprintf("/api/v1/registrations?vin=%s", tests[i].vin)
 			req := httptest.NewRequest(http.MethodGet, url, nil)

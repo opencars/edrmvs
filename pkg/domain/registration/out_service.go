@@ -7,15 +7,18 @@ import (
 	"github.com/opencars/translit"
 
 	"github.com/opencars/edrmvs/pkg/domain"
+	"github.com/opencars/edrmvs/pkg/logger"
 )
 
 type OutService struct {
-	store domain.RegistrationStore
+	s domain.RegistrationStore
+	p domain.RegistrationProvider
 }
 
-func NewRegistrationService(store domain.RegistrationStore) *OutService {
+func NewService(s domain.RegistrationStore, p domain.RegistrationProvider) *OutService {
 	return &OutService{
-		store: store,
+		s: s,
+		p: p,
 	}
 }
 
@@ -26,17 +29,45 @@ func (svc *OutService) FindByNumber(ctx context.Context, lexeme string) ([]domai
 		return nil, domain.ErrBadNumber
 	}
 
-	return svc.store.FindByNumber(ctx, number)
+	return svc.s.FindByNumber(ctx, number)
 }
 
-func (svc *OutService) FindByVIN(ctx context.Context, lexeme string) ([]domain.Registration, error) {
+func (svc *OutService) FindByVIN(ctx context.Context, lexeme string, v2 bool) ([]domain.Registration, error) {
 	vin := translit.ToLatin(strings.ToUpper(lexeme))
 
 	if len(vin) < 6 {
 		return nil, domain.ErrBadVIN
 	}
 
-	return svc.store.FindByVIN(ctx, vin)
+	registrations, err := svc.s.FindByVIN(ctx, vin)
+	if err != nil {
+		return nil, err
+	}
+
+	if !v2 {
+		return registrations, nil
+	}
+
+	for i := range registrations {
+		registrations[i].Code = translit.ToLatin(registrations[i].Code)
+
+		var isActive bool
+		items, err := svc.p.FindByCode(ctx, registrations[i].Code)
+		if err != nil {
+			logger.Errorf("failed to check is_active: %s", err)
+			continue
+		}
+
+		for _, item := range items {
+			if item.Number == registrations[i].Number {
+				isActive = true
+			}
+		}
+
+		registrations[i].IsActive = &isActive
+	}
+
+	return registrations, nil
 }
 
 func (svc *OutService) FindByCode(ctx context.Context, lexeme string) (*domain.Registration, error) {
@@ -45,9 +76,9 @@ func (svc *OutService) FindByCode(ctx context.Context, lexeme string) (*domain.R
 		return nil, domain.ErrBadCode
 	}
 
-	return svc.store.FindByCode(ctx, code)
+	return svc.s.FindByCode(ctx, code)
 }
 
 func (svc *OutService) Health(ctx context.Context) error {
-	return svc.store.Health(ctx)
+	return svc.s.Health(ctx)
 }

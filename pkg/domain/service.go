@@ -7,7 +7,7 @@ import (
 type RegistrationService interface {
 	FindByNumber(ctx context.Context, number string) ([]Registration, error)
 	FindByCode(ctx context.Context, code string) (*Registration, error)
-	FindByVIN(ctx context.Context, vin string) ([]Registration, error)
+	FindByVIN(ctx context.Context, vin string, v2 bool) ([]Registration, error)
 	Health(ctx context.Context) error
 }
 
