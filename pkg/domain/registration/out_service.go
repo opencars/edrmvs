@@ -4,8 +4,9 @@ import (
 	"context"
 	"strings"
 
-	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/translit"
+
+	"github.com/opencars/edrmvs/pkg/domain"
 )
 
 type OutService struct {

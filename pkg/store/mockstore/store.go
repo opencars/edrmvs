@@ -6,35 +6,36 @@ package mockstore
 
 import (
 	context "context"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 	domain "github.com/opencars/edrmvs/pkg/domain"
-	reflect "reflect"
 )
 
-// MockFullRegistrationStore is a mock of FullRegistrationStore interface
+// MockFullRegistrationStore is a mock of FullRegistrationStore interface.
 type MockFullRegistrationStore struct {
 	ctrl     *gomock.Controller
 	recorder *MockFullRegistrationStoreMockRecorder
 }
 
-// MockFullRegistrationStoreMockRecorder is the mock recorder for MockFullRegistrationStore
+// MockFullRegistrationStoreMockRecorder is the mock recorder for MockFullRegistrationStore.
 type MockFullRegistrationStoreMockRecorder struct {
 	mock *MockFullRegistrationStore
 }
 
-// NewMockFullRegistrationStore creates a new mock instance
+// NewMockFullRegistrationStore creates a new mock instance.
 func NewMockFullRegistrationStore(ctrl *gomock.Controller) *MockFullRegistrationStore {
 	mock := &MockFullRegistrationStore{ctrl: ctrl}
 	mock.recorder = &MockFullRegistrationStoreMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockFullRegistrationStore) EXPECT() *MockFullRegistrationStoreMockRecorder {
 	return m.recorder
 }
 
-// AllSeries mocks base method
+// AllSeries mocks base method.
 func (m *MockFullRegistrationStore) AllSeries(arg0 context.Context) ([]string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AllSeries", arg0)
@@ -43,13 +44,13 @@ func (m *MockFullRegistrationStore) AllSeries(arg0 context.Context) ([]string, e
 	return ret0, ret1
 }
 
-// AllSeries indicates an expected call of AllSeries
+// AllSeries indicates an expected call of AllSeries.
 func (mr *MockFullRegistrationStoreMockRecorder) AllSeries(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AllSeries", reflect.TypeOf((*MockFullRegistrationStore)(nil).AllSeries), arg0)
 }
 
-// Create mocks base method
+// Create mocks base method.
 func (m *MockFullRegistrationStore) Create(arg0 context.Context, arg1 *domain.Registration) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
@@ -57,13 +58,13 @@ func (m *MockFullRegistrationStore) Create(arg0 context.Context, arg1 *domain.Re
 	return ret0
 }
 
-// Create indicates an expected call of Create
+// Create indicates an expected call of Create.
 func (mr *MockFullRegistrationStoreMockRecorder) Create(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFullRegistrationStore)(nil).Create), arg0, arg1)
 }
 
-// FindByCode mocks base method
+// FindByCode mocks base method.
 func (m *MockFullRegistrationStore) FindByCode(arg0 context.Context, arg1 string) (*domain.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByCode", arg0, arg1)
@@ -72,13 +73,13 @@ func (m *MockFullRegistrationStore) FindByCode(arg0 context.Context, arg1 string
 	return ret0, ret1
 }
 
-// FindByCode indicates an expected call of FindByCode
+// FindByCode indicates an expected call of FindByCode.
 func (mr *MockFullRegistrationStoreMockRecorder) FindByCode(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByCode", reflect.TypeOf((*MockFullRegistrationStore)(nil).FindByCode), arg0, arg1)
 }
 
-// FindByNumber mocks base method
+// FindByNumber mocks base method.
 func (m *MockFullRegistrationStore) FindByNumber(arg0 context.Context, arg1 string) ([]domain.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByNumber", arg0, arg1)
@@ -87,13 +88,13 @@ func (m *MockFullRegistrationStore) FindByNumber(arg0 context.Context, arg1 stri
 	return ret0, ret1
 }
 
-// FindByNumber indicates an expected call of FindByNumber
+// FindByNumber indicates an expected call of FindByNumber.
 func (mr *MockFullRegistrationStoreMockRecorder) FindByNumber(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByNumber", reflect.TypeOf((*MockFullRegistrationStore)(nil).FindByNumber), arg0, arg1)
 }
 
-// FindByVIN mocks base method
+// FindByVIN mocks base method.
 func (m *MockFullRegistrationStore) FindByVIN(arg0 context.Context, arg1 string) ([]domain.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByVIN", arg0, arg1)
@@ -102,13 +103,13 @@ func (m *MockFullRegistrationStore) FindByVIN(arg0 context.Context, arg1 string)
 	return ret0, ret1
 }
 
-// FindByVIN indicates an expected call of FindByVIN
+// FindByVIN indicates an expected call of FindByVIN.
 func (mr *MockFullRegistrationStoreMockRecorder) FindByVIN(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByVIN", reflect.TypeOf((*MockFullRegistrationStore)(nil).FindByVIN), arg0, arg1)
 }
 
-// FindLastBySeries mocks base method
+// FindLastBySeries mocks base method.
 func (m *MockFullRegistrationStore) FindLastBySeries(arg0 context.Context, arg1 string) (*domain.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindLastBySeries", arg0, arg1)
@@ -117,13 +118,13 @@ func (m *MockFullRegistrationStore) FindLastBySeries(arg0 context.Context, arg1 
 	return ret0, ret1
 }
 
-// FindLastBySeries indicates an expected call of FindLastBySeries
+// FindLastBySeries indicates an expected call of FindLastBySeries.
 func (mr *MockFullRegistrationStoreMockRecorder) FindLastBySeries(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindLastBySeries", reflect.TypeOf((*MockFullRegistrationStore)(nil).FindLastBySeries), arg0, arg1)
 }
 
-// Health mocks base method
+// Health mocks base method.
 func (m *MockFullRegistrationStore) Health(arg0 context.Context) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Health", arg0)
@@ -131,7 +132,7 @@ func (m *MockFullRegistrationStore) Health(arg0 context.Context) error {
 	return ret0
 }
 
-// Health indicates an expected call of Health
+// Health indicates an expected call of Health.
 func (mr *MockFullRegistrationStoreMockRecorder) Health(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Health", reflect.TypeOf((*MockFullRegistrationStore)(nil).Health), arg0)
