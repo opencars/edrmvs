@@ -1,12 +1,15 @@
 package http
 
 func (s *server) configureRouter() {
-	router := s.router.PathPrefix("/api/v1/").Subrouter()
+	v1 := s.router.PathPrefix("/api/v1/").Subrouter()
 
-	router.Handle("/version", s.Version())
-	router.Handle("/health", s.Health())
+	v1.Handle("/version", s.Version())
+	v1.Handle("/health", s.Health())
 
-	router.Handle("/registrations", s.FindByVIN()).Queries("vin", "{vin}")
-	router.Handle("/registrations", s.FindByNumber()).Queries("number", "{number}")
-	router.Handle("/registrations/{code}", s.FindByCode())
+	v1.Handle("/registrations", s.FindByVIN(false)).Queries("vin", "{vin}")
+	v1.Handle("/registrations", s.FindByNumber()).Queries("number", "{number}")
+	v1.Handle("/registrations/{code}", s.FindByCode())
+
+	v2 := s.router.PathPrefix("/api/v2/").Subrouter()
+	v2.Handle("/registrations", s.FindByVIN(true)).Queries("vin", "{vin}")
 }

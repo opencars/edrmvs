@@ -66,18 +66,18 @@ func (mr *MockRegistrationServiceMockRecorder) FindByNumber(arg0, arg1 interface
 }
 
 // FindByVIN mocks base method.
-func (m *MockRegistrationService) FindByVIN(arg0 context.Context, arg1 string) ([]domain.Registration, error) {
+func (m *MockRegistrationService) FindByVIN(arg0 context.Context, arg1 string, arg2 bool) ([]domain.Registration, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByVIN", arg0, arg1)
+	ret := m.ctrl.Call(m, "FindByVIN", arg0, arg1, arg2)
 	ret0, _ := ret[0].([]domain.Registration)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindByVIN indicates an expected call of FindByVIN.
-func (mr *MockRegistrationServiceMockRecorder) FindByVIN(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockRegistrationServiceMockRecorder) FindByVIN(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByVIN", reflect.TypeOf((*MockRegistrationService)(nil).FindByVIN), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByVIN", reflect.TypeOf((*MockRegistrationService)(nil).FindByVIN), arg0, arg1, arg2)
 }
 
 // Health mocks base method.

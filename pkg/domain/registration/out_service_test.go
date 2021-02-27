@@ -24,7 +24,7 @@ func TestOutService_FindByNumber(t *testing.T) {
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByNumber(gomock.Any(), expected[0].Number).Return(expected, nil)
 
-	svc := registration.NewRegistrationService(store)
+	svc := registration.NewService(store, nil)
 	actual, err := svc.FindByNumber(context.Background(), expected[0].Number)
 	require.NoError(t, err)
 
@@ -45,8 +45,8 @@ func TestOutService_FindByVIN(t *testing.T) {
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByVIN(gomock.Any(), expected[0].Number).Return(expected, nil)
 
-	svc := registration.NewRegistrationService(store)
-	actual, err := svc.FindByVIN(context.Background(), expected[0].Number)
+	svc := registration.NewService(store, nil)
+	actual, err := svc.FindByVIN(context.Background(), expected[0].Number, false)
 	require.NoError(t, err)
 
 	assert.Len(t, actual, 1)
@@ -64,7 +64,7 @@ func TestOutService_FindByCode(t *testing.T) {
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByCode(gomock.Any(), expected.Code).Return(expected, nil)
 
-	svc := registration.NewRegistrationService(store)
+	svc := registration.NewService(store, nil)
 	actual, err := svc.FindByCode(context.Background(), expected.Code)
 	require.NoError(t, err)
 

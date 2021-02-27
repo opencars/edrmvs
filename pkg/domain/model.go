@@ -20,4 +20,5 @@ type Registration struct {
 	RankCategory   *string  `json:"rank_category,omitempty"`
 	TotalWeight    *float64 `json:"total_weight,omitempty"`
 	VIN            *string  `json:"vin,omitempty"`
+	IsActive       *bool    `json:"is_active,omitempty"`
 }
