@@ -106,7 +106,7 @@ func (api *API) VehiclePassport(ctx context.Context, token string, code string) 
 
 	info := make([]Registration, 0)
 	if resp.StatusCode != http.StatusOK {
-		return info, nil
+		return nil, fmt.Errorf("failed %s", resp.Status)
 	}
 
 	if err = json.NewDecoder(resp.Body).Decode(&info); err != nil {

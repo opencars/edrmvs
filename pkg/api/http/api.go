@@ -2,7 +2,6 @@ package http
 
 import (
 	"context"
-	"github.com/opencars/edrmvs/pkg/domain"
 	"io"
 	"net/http"
 	"os"
@@ -10,6 +9,7 @@ import (
 	"github.com/gorilla/handlers"
 
 	"github.com/opencars/edrmvs/pkg/config"
+	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/logger"
 )
 

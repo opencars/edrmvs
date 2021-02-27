@@ -6,35 +6,36 @@ package mocks
 
 import (
 	context "context"
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 	domain "github.com/opencars/edrmvs/pkg/domain"
-	reflect "reflect"
 )
 
-// MockRegistrationProvider is a mock of RegistrationProvider interface
+// MockRegistrationProvider is a mock of RegistrationProvider interface.
 type MockRegistrationProvider struct {
 	ctrl     *gomock.Controller
 	recorder *MockRegistrationProviderMockRecorder
 }
 
-// MockRegistrationProviderMockRecorder is the mock recorder for MockRegistrationProvider
+// MockRegistrationProviderMockRecorder is the mock recorder for MockRegistrationProvider.
 type MockRegistrationProviderMockRecorder struct {
 	mock *MockRegistrationProvider
 }
 
-// NewMockRegistrationProvider creates a new mock instance
+// NewMockRegistrationProvider creates a new mock instance.
 func NewMockRegistrationProvider(ctrl *gomock.Controller) *MockRegistrationProvider {
 	mock := &MockRegistrationProvider{ctrl: ctrl}
 	mock.recorder = &MockRegistrationProviderMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockRegistrationProvider) EXPECT() *MockRegistrationProviderMockRecorder {
 	return m.recorder
 }
 
-// FindByCode mocks base method
+// FindByCode mocks base method.
 func (m *MockRegistrationProvider) FindByCode(arg0 context.Context, arg1 string) ([]domain.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByCode", arg0, arg1)
@@ -43,7 +44,7 @@ func (m *MockRegistrationProvider) FindByCode(arg0 context.Context, arg1 string)
 	return ret0, ret1
 }
 
-// FindByCode indicates an expected call of FindByCode
+// FindByCode indicates an expected call of FindByCode.
 func (mr *MockRegistrationProviderMockRecorder) FindByCode(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByCode", reflect.TypeOf((*MockRegistrationProvider)(nil).FindByCode), arg0, arg1)

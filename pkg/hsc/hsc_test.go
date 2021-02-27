@@ -10,8 +10,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/opencars/edrmvs/pkg/config"
 )
 
 var (

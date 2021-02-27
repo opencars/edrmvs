@@ -7,8 +7,8 @@ import (
 	"runtime"
 
 	"github.com/gorilla/mux"
-	"github.com/opencars/edrmvs/pkg/domain"
 
+	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/handler"
 	"github.com/opencars/edrmvs/pkg/version"
 )

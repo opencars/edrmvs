@@ -7,9 +7,10 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/mocks"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestServer_FindByNumber(t *testing.T) {
