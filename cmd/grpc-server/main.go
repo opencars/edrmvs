@@ -1,16 +1,17 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"os/signal"
+	"syscall"
+
 	"github.com/opencars/edrmvs/pkg/api/grpc"
 	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/opencars/edrmvs/pkg/domain/registration"
 	"github.com/opencars/edrmvs/pkg/hsc"
 	"github.com/opencars/edrmvs/pkg/logger"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 func main() {
@@ -37,18 +38,11 @@ func main() {
 	addr := ":3000"
 	api := grpc.New(addr, r)
 
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
-
-	go func() {
-		<-c
-		if err := api.Close(); err != nil {
-			logger.Fatalf("close: %v", err)
-		}
-	}()
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
 
 	logger.Infof("Listening on %s...", addr)
-	if err := api.Run(); err != nil {
+	if err := api.Run(ctx); err != nil {
 		logger.Fatalf("grpc: %v", err)
 	}
 }
