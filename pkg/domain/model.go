@@ -1,5 +1,7 @@
 package domain
 
+const DateLayout = "2006-01-02"
+
 type Registration struct {
 	Brand          *string  `json:"brand,omitempty"`
 	Capacity       *int     `json:"capacity,omitempty"`
