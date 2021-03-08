@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/opencars/edrmvs/pkg/api/grpc"
@@ -15,14 +16,14 @@ import (
 )
 
 func main() {
-	var configPath string
-
-	flag.StringVar(&configPath, "config", "./config/config.yaml", "Path to the configuration file")
+	cfg := flag.String("config", "config/config.yaml", "Path to the configuration file")
+	port := flag.Int("port", 3000, "Port of the server")
 
 	flag.Parse()
-	conf, err := config.New(configPath)
+
+	conf, err := config.New(*cfg)
 	if err != nil {
-		logger.Fatalf("failed read config: %v", err)
+		logger.Fatalf("config: %v", err)
 	}
 
 	logger.NewLogger(logger.LogLevel(conf.Log.Level), conf.Log.Mode == "dev")
@@ -35,7 +36,7 @@ func main() {
 	p := hsc.NewProvider(hsc.New(&conf.HSC))
 	r := registration.NewService(s, p)
 
-	addr := ":3000"
+	addr := ":" + strconv.Itoa(*port)
 	api := grpc.New(addr, r)
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)

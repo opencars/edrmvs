@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/opencars/edrmvs/pkg/api/http"
@@ -15,20 +16,17 @@ import (
 )
 
 func main() {
-	var configPath string
-
-	flag.StringVar(&configPath, "config", "./config/config.yaml", "Path to the configuration file")
+	cfg := flag.String("config", "config/config.yaml", "Path to the configuration file")
+	port := flag.Int("port", 8080, "Port of the server")
 
 	flag.Parse()
-	conf, err := config.New(configPath)
+
+	conf, err := config.New(*cfg)
 	if err != nil {
 		logger.Fatalf("failed read config: %v", err)
 	}
 
 	logger.NewLogger(logger.LogLevel(conf.Log.Level), conf.Log.Mode == "dev")
-
-	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
-	defer stop()
 
 	s, err := sqlstore.New(&conf.DB)
 	if err != nil {
@@ -38,9 +36,13 @@ func main() {
 	p := hsc.NewProvider(hsc.New(&conf.HSC))
 	r := registration.NewService(s, p)
 
-	addr := ":8080"
+	addr := ":" + strconv.Itoa(*port)
+
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
 	logger.Infof("Listening on %s...", addr)
 	if err := http.Start(ctx, addr, &conf.Server, r); err != nil {
-		logger.Fatalf("http server failed: %v", err)
+		logger.Fatalf("http: %v", err)
 	}
 }
