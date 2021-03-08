@@ -1,0 +1,12 @@
+.circleci
+.dockerignore
+.git
+.gitignore
+.idea
+Dockerfile
+LICENSE
+README.md
+bin
+docker-compose.yaml
+revive.toml
+testdata

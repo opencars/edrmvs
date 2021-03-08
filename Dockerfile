@@ -6,7 +6,7 @@ WORKDIR /go/src/app
 
 LABEL maintainer="ashanaakh@gmail.com"
 
-RUN apk add bash ca-certificates git gcc g++ libc-dev
+RUN apk add bash ca-certificates git gcc g++ libc-dev curl make
 
 COPY go.mod go.sum ./
 
@@ -14,10 +14,9 @@ RUN go mod download
 
 COPY . .
 
-RUN export VERSION=$(cat VERSION) && \
-    go build -ldflags "-X github.com/opencars/edrmvs/pkg/version.Version=$VERSION" -o /go/bin/extractor ./cmd/extractor/main.go && \
-    go build -ldflags "-X github.com/opencars/edrmvs/pkg/version.Version=$VERSION" -o /go/bin/http-server ./cmd/http-server/main.go && \
-    go build -ldflags "-X github.com/opencars/edrmvs/pkg/version.Version=$VERSION" -o /go/bin/grpc-server ./cmd/grpc-server/main.go
+RUN export BLDDIR=/go/bin && \
+    make clean && \
+    make build
 
 FROM alpine
 
@@ -30,4 +29,4 @@ COPY ./config ./config
 
 EXPOSE 8080
 
-CMD ["./server"]
+CMD ["./http-server","-port", "8080"]
