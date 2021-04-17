@@ -67,9 +67,9 @@ func (s *RegistrationStore) FindByCode(ctx context.Context, code string) (*domai
 			    make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
 			    n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
-		WHERE CONCAT(s_doc, n_doc) = $1
+		WHERE s_doc = $1 AND n_doc = $2
 		ORDER BY d_reg DESC`,
-		code,
+		code[0:3], code[3:9],
 	)
 
 	if err == sql.ErrNoRows {
