@@ -81,6 +81,10 @@ func (p *Processor) Process(ctx context.Context, series string, from int64) erro
 			continue
 		}
 
+		for _, r := range regs {
+			r.Number = translit.ToLatin(r.Number)
+		}
+
 		err = p.store.Create(ctx, &regs[0])
 		if errors.Is(err, context.Canceled) {
 			return nil
