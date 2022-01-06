@@ -10,6 +10,7 @@ import (
 	"github.com/opencars/translit"
 
 	"github.com/opencars/edrmvs/pkg/domain"
+	"github.com/opencars/edrmvs/pkg/domain/model"
 	"github.com/opencars/edrmvs/pkg/logger"
 )
 
@@ -106,7 +107,7 @@ func (p *Processor) start(ctx context.Context, series string, from int64) (int64
 	}
 
 	last, err := p.store.FindLastBySeries(ctx, series)
-	if errors.Is(err, domain.ErrNotFound) {
+	if errors.Is(err, model.ErrNotFound) {
 		return 0, nil
 	}
 

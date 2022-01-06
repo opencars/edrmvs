@@ -1,4 +1,4 @@
-package registration_test
+package service_test
 
 import (
 	"context"
@@ -10,10 +10,11 @@ import (
 
 	"github.com/opencars/edrmvs/pkg/domain/mocks"
 	"github.com/opencars/edrmvs/pkg/domain/model"
-	"github.com/opencars/edrmvs/pkg/domain/registration"
+	"github.com/opencars/edrmvs/pkg/domain/query"
+	"github.com/opencars/edrmvs/pkg/domain/service"
 )
 
-func TestOutService_FindByNumber(t *testing.T) {
+func TestCustomerService_ListByNumber(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -24,8 +25,8 @@ func TestOutService_FindByNumber(t *testing.T) {
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByNumber(gomock.Any(), expected[0].Number).Return(expected, nil)
 
-	svc := registration.NewService(store, nil)
-	actual, err := svc.FindByNumber(context.Background(), expected[0].Number)
+	svc := service.NewCustomerService(store, nil, nil)
+	actual, err := svc.ListByNumber(context.Background(), &query.ListByNumber{Number: expected[0].Number})
 	require.NoError(t, err)
 
 	assert.Len(t, actual, 1)
@@ -34,7 +35,7 @@ func TestOutService_FindByNumber(t *testing.T) {
 	assert.Equal(t, expected[0].VIN, actual[0].VIN)
 }
 
-func TestOutService_FindByVIN(t *testing.T) {
+func TestCustomerService_ListByVIN(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -45,8 +46,8 @@ func TestOutService_FindByVIN(t *testing.T) {
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByVIN(gomock.Any(), expected[0].Number).Return(expected, nil)
 
-	svc := registration.NewService(store, nil)
-	actual, err := svc.FindByVIN(context.Background(), expected[0].Number, false)
+	svc := service.NewCustomerService(store, nil, nil)
+	actual, err := svc.ListByVIN(context.Background(), &query.ListByVIN{VIN: *expected[0].VIN}, false)
 	require.NoError(t, err)
 
 	assert.Len(t, actual, 1)
@@ -55,7 +56,7 @@ func TestOutService_FindByVIN(t *testing.T) {
 	assert.Equal(t, expected[0].VIN, actual[0].VIN)
 }
 
-func TestOutService_FindByCode(t *testing.T) {
+func TestCustomerService_DetailsByCode(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -64,8 +65,8 @@ func TestOutService_FindByCode(t *testing.T) {
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByCode(gomock.Any(), expected.Code).Return(expected, nil)
 
-	svc := registration.NewService(store, nil)
-	actual, err := svc.FindByCode(context.Background(), expected.Code)
+	svc := service.NewCustomerService(store, nil, nil)
+	actual, err := svc.DetailsByCode(context.Background(), &query.DetailsByCode{Code: expected.Code})
 	require.NoError(t, err)
 
 	assert.Equal(t, expected.Code, actual.Code)

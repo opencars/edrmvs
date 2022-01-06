@@ -9,10 +9,12 @@ import (
 
 	"github.com/opencars/edrmvs/pkg/api/http"
 	"github.com/opencars/edrmvs/pkg/config"
-	"github.com/opencars/edrmvs/pkg/domain/registration"
+	"github.com/opencars/edrmvs/pkg/domain/service"
 	"github.com/opencars/edrmvs/pkg/hsc"
 	"github.com/opencars/edrmvs/pkg/logger"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
+
+	"github.com/opencars/schema/client"
 )
 
 func main() {
@@ -33,8 +35,18 @@ func main() {
 		logger.Fatalf("store: %v", err)
 	}
 
+	c, err := client.New(conf.NATS.Address())
+	if err != nil {
+		logger.Fatalf("nats: %v", err)
+	}
+
+	producer, err := c.Producer()
+	if err != nil {
+		logger.Fatalf("producer: %v", err)
+	}
+
 	p := hsc.NewProvider(hsc.New(&conf.HSC))
-	r := registration.NewService(s, p)
+	r := service.NewCustomerService(s, p, producer)
 
 	addr := ":" + strconv.Itoa(*port)
 

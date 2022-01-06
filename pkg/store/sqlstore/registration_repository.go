@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/model"
 )
 
@@ -74,7 +73,7 @@ func (s *RegistrationStore) FindByCode(ctx context.Context, code string) (*model
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, domain.ErrNotFound
+		return nil, model.ErrNotFound
 	}
 
 	if err != nil {
@@ -127,7 +126,7 @@ func (s *RegistrationStore) FindLastBySeries(ctx context.Context, series string)
 	)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return nil, domain.ErrNotFound
+		return nil, model.ErrNotFound
 	}
 
 	if err != nil {
@@ -143,7 +142,7 @@ func (s *RegistrationStore) AllSeries(ctx context.Context) ([]string, error) {
 
 	err := s.db.SelectContext(ctx, &codes, `SELECT s_doc FROM registrations GROUP BY s_doc`)
 	if errors.Is(err, sql.ErrNoRows) {
-		return nil, domain.ErrNotFound
+		return nil, model.ErrNotFound
 	}
 
 	if err != nil {

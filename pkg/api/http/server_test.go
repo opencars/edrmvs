@@ -9,7 +9,6 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/mocks"
 	"github.com/opencars/edrmvs/pkg/domain/model"
 )
@@ -39,7 +38,7 @@ func TestServer_FindByNumber(t *testing.T) {
 			name:          "bad_request",
 			number:        "BLAH-BLAH",
 			registrations: []model.Registration{},
-			wantErr:       domain.ErrBadNumber,
+			wantErr:       model.ErrBadNumber,
 			httpStatus:    http.StatusBadRequest,
 		},
 	}
@@ -49,8 +48,8 @@ func TestServer_FindByNumber(t *testing.T) {
 
 	for i := range tests {
 		t.Run(tests[i].name, func(t *testing.T) {
-			svc := mocks.NewMockRegistrationService(ctrl)
-			svc.EXPECT().FindByNumber(gomock.Any(), tests[i].number).Return(tests[i].registrations, tests[i].wantErr)
+			svc := mocks.NewMockCustomerService(ctrl)
+			svc.EXPECT().ListByNumber(gomock.Any(), tests[i].number).Return(tests[i].registrations, tests[i].wantErr)
 
 			url := fmt.Sprintf("/api/v1/registrations?number=%s", tests[i].number)
 			req := httptest.NewRequest(http.MethodGet, url, nil)
@@ -90,7 +89,7 @@ func TestServer_FindByVIN(t *testing.T) {
 			name:          "bad_request",
 			vin:           "BLAH-BLAH",
 			registrations: make([]model.Registration, 0),
-			wantErr:       domain.ErrBadVIN,
+			wantErr:       model.ErrBadVIN,
 			httpStatus:    http.StatusBadRequest,
 		},
 	}
@@ -100,8 +99,8 @@ func TestServer_FindByVIN(t *testing.T) {
 
 	for i := range tests {
 		t.Run(tests[i].name, func(t *testing.T) {
-			svc := mocks.NewMockRegistrationService(ctrl)
-			svc.EXPECT().FindByVIN(gomock.Any(), tests[i].vin, false).Return(tests[i].registrations, tests[i].wantErr)
+			svc := mocks.NewMockCustomerService(ctrl)
+			svc.EXPECT().ListByVIN(gomock.Any(), tests[i].vin, false).Return(tests[i].registrations, tests[i].wantErr)
 
 			url := fmt.Sprintf("/api/v1/registrations?vin=%s", tests[i].vin)
 			req := httptest.NewRequest(http.MethodGet, url, nil)
@@ -139,7 +138,7 @@ func TestServer_FindByCode(t *testing.T) {
 			name:         "bad_request",
 			code:         "BLAH-BLAH",
 			registration: nil,
-			wantErr:      domain.ErrBadCode,
+			wantErr:      model.ErrBadCode,
 			httpStatus:   http.StatusBadRequest,
 		},
 	}
@@ -149,8 +148,8 @@ func TestServer_FindByCode(t *testing.T) {
 
 	for i := range tests {
 		t.Run(tests[i].name, func(t *testing.T) {
-			svc := mocks.NewMockRegistrationService(ctrl)
-			svc.EXPECT().FindByCode(gomock.Any(), tests[i].code).Return(tests[i].registration, tests[i].wantErr)
+			svc := mocks.NewMockCustomerService(ctrl)
+			svc.EXPECT().DetailsByCode(gomock.Any(), tests[i].code).Return(tests[i].registration, tests[i].wantErr)
 
 			url := fmt.Sprintf("/api/v1/registrations/%s", tests[i].code)
 			req := httptest.NewRequest(http.MethodGet, url, nil)

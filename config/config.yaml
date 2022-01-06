@@ -24,3 +24,9 @@ hsc:
   base_url: "https://mainapi.hsc.gov.ua"
   username: "opendata"
   password: "open_pass_bcrypt_data"
+
+nats:
+  host: "127.0.0.1"
+  port: 4222
+  user: "opencars"
+  password: "opencars"
