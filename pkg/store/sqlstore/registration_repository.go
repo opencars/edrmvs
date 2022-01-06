@@ -6,10 +6,11 @@ import (
 	"errors"
 
 	"github.com/opencars/edrmvs/pkg/domain"
+	"github.com/opencars/edrmvs/pkg/domain/model"
 )
 
 // Create adds new record to the database.
-func (s *RegistrationStore) Create(ctx context.Context, registration *domain.Registration) error {
+func (s *RegistrationStore) Create(ctx context.Context, registration *model.Registration) error {
 	record := convertFromDomain(registration)
 
 	_, err := s.db.NamedExecContext(ctx,
@@ -33,7 +34,7 @@ func (s *RegistrationStore) Create(ctx context.Context, registration *domain.Reg
 }
 
 // FindByNumber returns registrations with specified number.
-func (s *RegistrationStore) FindByNumber(ctx context.Context, number string) ([]domain.Registration, error) {
+func (s *RegistrationStore) FindByNumber(ctx context.Context, number string) ([]model.Registration, error) {
 	records := make([]Registration, 0)
 
 	err := s.db.SelectContext(ctx, &records,
@@ -50,7 +51,7 @@ func (s *RegistrationStore) FindByNumber(ctx context.Context, number string) ([]
 		return nil, err
 	}
 
-	result := make([]domain.Registration, 0)
+	result := make([]model.Registration, 0)
 	for i := range records {
 		result = append(result, *convertToDomain(&records[i]))
 	}
@@ -59,7 +60,7 @@ func (s *RegistrationStore) FindByNumber(ctx context.Context, number string) ([]
 }
 
 // FindByCode returns registrations with specified code.
-func (s *RegistrationStore) FindByCode(ctx context.Context, code string) (*domain.Registration, error) {
+func (s *RegistrationStore) FindByCode(ctx context.Context, code string) (*model.Registration, error) {
 	var record Registration
 
 	err := s.db.GetContext(ctx, &record,
@@ -84,7 +85,7 @@ func (s *RegistrationStore) FindByCode(ctx context.Context, code string) (*domai
 }
 
 // FindByVIN returns registrations with specified VIN.
-func (s *RegistrationStore) FindByVIN(ctx context.Context, vin string) ([]domain.Registration, error) {
+func (s *RegistrationStore) FindByVIN(ctx context.Context, vin string) ([]model.Registration, error) {
 	records := make([]Registration, 0)
 
 	err := s.db.SelectContext(ctx, &records,
@@ -101,7 +102,7 @@ func (s *RegistrationStore) FindByVIN(ctx context.Context, vin string) ([]domain
 		return nil, err
 	}
 
-	result := make([]domain.Registration, 0)
+	result := make([]model.Registration, 0)
 	for i := range records {
 		result = append(result, *convertToDomain(&records[i]))
 	}
@@ -110,7 +111,7 @@ func (s *RegistrationStore) FindByVIN(ctx context.Context, vin string) ([]domain
 }
 
 // GetLast returns last registration from the database.
-func (s *RegistrationStore) FindLastBySeries(ctx context.Context, series string) (*domain.Registration, error) {
+func (s *RegistrationStore) FindLastBySeries(ctx context.Context, series string) (*model.Registration, error) {
 	var record Registration
 
 	err := s.db.GetContext(ctx, &record,

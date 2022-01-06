@@ -7,6 +7,7 @@ import (
 	"github.com/opencars/translit"
 
 	"github.com/opencars/edrmvs/pkg/domain"
+	"github.com/opencars/edrmvs/pkg/domain/model"
 	"github.com/opencars/edrmvs/pkg/logger"
 )
 
@@ -22,7 +23,7 @@ func NewService(s domain.RegistrationStore, p domain.RegistrationProvider) *OutS
 	}
 }
 
-func (svc *OutService) FindByNumber(ctx context.Context, lexeme string) ([]domain.Registration, error) {
+func (svc *OutService) FindByNumber(ctx context.Context, lexeme string) ([]model.Registration, error) {
 	number := translit.ToLatin(strings.ToUpper(lexeme))
 
 	if len(number) < 6 {
@@ -32,7 +33,7 @@ func (svc *OutService) FindByNumber(ctx context.Context, lexeme string) ([]domai
 	return svc.s.FindByNumber(ctx, number)
 }
 
-func (svc *OutService) FindByVIN(ctx context.Context, lexeme string, v2 bool) ([]domain.Registration, error) {
+func (svc *OutService) FindByVIN(ctx context.Context, lexeme string, v2 bool) ([]model.Registration, error) {
 	vin := translit.ToLatin(strings.ToUpper(lexeme))
 
 	if len(vin) < 6 {
@@ -70,7 +71,7 @@ func (svc *OutService) FindByVIN(ctx context.Context, lexeme string, v2 bool) ([
 	return registrations, nil
 }
 
-func (svc *OutService) FindByCode(ctx context.Context, lexeme string) (*domain.Registration, error) {
+func (svc *OutService) FindByCode(ctx context.Context, lexeme string) (*model.Registration, error) {
 	code := translit.ToLatin(strings.ToUpper(lexeme))
 	if len(code) != 9 {
 		return nil, domain.ErrBadCode

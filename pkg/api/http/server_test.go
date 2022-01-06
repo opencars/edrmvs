@@ -11,24 +11,25 @@ import (
 
 	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/mocks"
+	"github.com/opencars/edrmvs/pkg/domain/model"
 )
 
 func TestServer_FindByNumber(t *testing.T) {
 	type args struct {
 		name          string
 		number        string
-		registrations []domain.Registration
+		registrations []model.Registration
 		wantErr       error
 		httpStatus    int
 	}
 
-	record := domain.TestRegistration(t)
+	record := model.TestRegistration(t)
 
 	tests := []args{
 		{
 			name:   "ok",
 			number: "AA9359PC",
-			registrations: []domain.Registration{
+			registrations: []model.Registration{
 				*record,
 			},
 			wantErr:    nil,
@@ -37,7 +38,7 @@ func TestServer_FindByNumber(t *testing.T) {
 		{
 			name:          "bad_request",
 			number:        "BLAH-BLAH",
-			registrations: []domain.Registration{},
+			registrations: []model.Registration{},
 			wantErr:       domain.ErrBadNumber,
 			httpStatus:    http.StatusBadRequest,
 		},
@@ -68,18 +69,18 @@ func TestServer_FindByVIN(t *testing.T) {
 	type args struct {
 		name          string
 		vin           string
-		registrations []domain.Registration
+		registrations []model.Registration
 		wantErr       error
 		httpStatus    int
 	}
 
-	record := domain.TestRegistration(t)
+	record := model.TestRegistration(t)
 
 	tests := []args{
 		{
 			name: "ok",
 			vin:  "5YJXCCE40GF010543",
-			registrations: []domain.Registration{
+			registrations: []model.Registration{
 				*record,
 			},
 			wantErr:    nil,
@@ -88,7 +89,7 @@ func TestServer_FindByVIN(t *testing.T) {
 		{
 			name:          "bad_request",
 			vin:           "BLAH-BLAH",
-			registrations: make([]domain.Registration, 0),
+			registrations: make([]model.Registration, 0),
 			wantErr:       domain.ErrBadVIN,
 			httpStatus:    http.StatusBadRequest,
 		},
@@ -119,12 +120,12 @@ func TestServer_FindByCode(t *testing.T) {
 	type args struct {
 		name         string
 		code         string
-		registration *domain.Registration
+		registration *model.Registration
 		wantErr      error
 		httpStatus   int
 	}
 
-	record := domain.TestRegistration(t)
+	record := model.TestRegistration(t)
 
 	tests := []args{
 		{

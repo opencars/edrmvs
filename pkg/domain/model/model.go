@@ -1,4 +1,8 @@
-package domain
+package model
+
+import (
+	"github.com/opencars/schema/vehicle"
+)
 
 const DateLayout = "2006-01-02"
 
@@ -23,4 +27,8 @@ type Registration struct {
 	TotalWeight    *float64 `json:"total_weight,omitempty"`
 	VIN            *string  `json:"vin,omitempty"`
 	IsActive       *bool    `json:"is_active,omitempty"`
+}
+
+func (r *Registration) Schema() *vehicle.Registration {
+	return &vehicle.Registration{}
 }

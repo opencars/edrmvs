@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/mocks"
+	"github.com/opencars/edrmvs/pkg/domain/model"
 	"github.com/opencars/edrmvs/pkg/domain/registration"
 )
 
@@ -17,8 +17,8 @@ func TestOutService_FindByNumber(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	expected := []domain.Registration{
-		*domain.TestRegistration(t),
+	expected := []model.Registration{
+		*model.TestRegistration(t),
 	}
 
 	store := mocks.NewMockRegistrationStore(ctrl)
@@ -38,8 +38,8 @@ func TestOutService_FindByVIN(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	expected := []domain.Registration{
-		*domain.TestRegistration(t),
+	expected := []model.Registration{
+		*model.TestRegistration(t),
 	}
 
 	store := mocks.NewMockRegistrationStore(ctrl)
@@ -59,7 +59,7 @@ func TestOutService_FindByCode(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	expected := domain.TestRegistration(t)
+	expected := model.TestRegistration(t)
 
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByCode(gomock.Any(), expected.Code).Return(expected, nil)

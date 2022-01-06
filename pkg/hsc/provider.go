@@ -6,7 +6,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/opencars/edrmvs/pkg/domain"
+	"github.com/opencars/edrmvs/pkg/domain/model"
 )
 
 var (
@@ -28,7 +28,7 @@ func NewProvider(api *API) *Provider {
 	}
 }
 
-func (p *Provider) FindByCode(ctx context.Context, code string) ([]domain.Registration, error) {
+func (p *Provider) FindByCode(ctx context.Context, code string) ([]model.Registration, error) {
 	token, err := p.token(ctx)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (p *Provider) FindByCode(ctx context.Context, code string) ([]domain.Regist
 		return nil, err
 	}
 
-	result := make([]domain.Registration, 0, len(registrations))
+	result := make([]model.Registration, 0, len(registrations))
 
 	for i := range registrations {
 		dto, err := convert(&registrations[i])
@@ -69,8 +69,8 @@ func (p *Provider) token(ctx context.Context) (string, error) {
 	return newSession.AccessToken, nil
 }
 
-func convert(r *Registration) (*domain.Registration, error) {
-	dto := domain.Registration{
+func convert(r *Registration) (*model.Registration, error) {
+	dto := model.Registration{
 		Brand:          r.Brand,
 		Color:          r.Color,
 		FirstRegDate:   r.FirstDate,

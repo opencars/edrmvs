@@ -9,8 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-
-	domain "github.com/opencars/edrmvs/pkg/domain"
+	model "github.com/opencars/edrmvs/pkg/domain/model"
 )
 
 // MockRegistrationService is a mock of RegistrationService interface.
@@ -37,10 +36,10 @@ func (m *MockRegistrationService) EXPECT() *MockRegistrationServiceMockRecorder 
 }
 
 // FindByCode mocks base method.
-func (m *MockRegistrationService) FindByCode(arg0 context.Context, arg1 string) (*domain.Registration, error) {
+func (m *MockRegistrationService) FindByCode(arg0 context.Context, arg1 string) (*model.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByCode", arg0, arg1)
-	ret0, _ := ret[0].(*domain.Registration)
+	ret0, _ := ret[0].(*model.Registration)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -52,10 +51,10 @@ func (mr *MockRegistrationServiceMockRecorder) FindByCode(arg0, arg1 interface{}
 }
 
 // FindByNumber mocks base method.
-func (m *MockRegistrationService) FindByNumber(arg0 context.Context, arg1 string) ([]domain.Registration, error) {
+func (m *MockRegistrationService) FindByNumber(arg0 context.Context, arg1 string) ([]model.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByNumber", arg0, arg1)
-	ret0, _ := ret[0].([]domain.Registration)
+	ret0, _ := ret[0].([]model.Registration)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -67,10 +66,10 @@ func (mr *MockRegistrationServiceMockRecorder) FindByNumber(arg0, arg1 interface
 }
 
 // FindByVIN mocks base method.
-func (m *MockRegistrationService) FindByVIN(arg0 context.Context, arg1 string, arg2 bool) ([]domain.Registration, error) {
+func (m *MockRegistrationService) FindByVIN(arg0 context.Context, arg1 string, arg2 bool) ([]model.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByVIN", arg0, arg1, arg2)
-	ret0, _ := ret[0].([]domain.Registration)
+	ret0, _ := ret[0].([]model.Registration)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
