@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 
+	"github.com/opencars/edrmvs/pkg/domain/query"
 	"github.com/opencars/grpc/pkg/registration"
 )
 
@@ -12,7 +13,11 @@ type registrationHandler struct {
 }
 
 func (h *registrationHandler) FindByNumber(ctx context.Context, r *registration.NumberRequest) (*registration.Response, error) {
-	registrations, err := h.api.svc.FindByNumber(ctx, r.Number)
+	q := query.ListWithNumberByInternal{
+		Number: r.GetNumber(),
+	}
+
+	registrations, err := h.api.svc.ListByNumber(ctx, &q)
 	if err != nil {
 		return nil, handleErr(err)
 	}
@@ -29,7 +34,11 @@ func (h *registrationHandler) FindByNumber(ctx context.Context, r *registration.
 }
 
 func (h *registrationHandler) FindByVIN(ctx context.Context, r *registration.VINRequest) (*registration.Response, error) {
-	registrations, err := h.api.svc.FindByVIN(ctx, r.Vin, true)
+	q := query.ListWithVINByInternal{
+		VIN: r.GetVin(),
+	}
+
+	registrations, err := h.api.svc.ListByVIN(ctx, &q)
 	if err != nil {
 		return nil, handleErr(err)
 	}
@@ -46,12 +55,18 @@ func (h *registrationHandler) FindByVIN(ctx context.Context, r *registration.VIN
 }
 
 func (h *registrationHandler) FindByCode(ctx context.Context, r *registration.CodeRequest) (*registration.Response, error) {
-	object, err := h.api.svc.FindByCode(ctx, r.Code)
+	q := query.DetailsWithCodeByInternal{
+		Code: r.GetCode(),
+	}
+
+	object, err := h.api.svc.DetailsByCode(ctx, &q)
 	if err != nil {
 		return nil, handleErr(err)
 	}
 
 	return &registration.Response{
-		Registrations: []*registration.Record{FromDomain(object)},
+		Registrations: []*registration.Record{
+			FromDomain(object),
+		},
 	}, nil
 }

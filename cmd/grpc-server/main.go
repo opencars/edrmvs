@@ -9,7 +9,7 @@ import (
 
 	"github.com/opencars/edrmvs/pkg/api/grpc"
 	"github.com/opencars/edrmvs/pkg/config"
-	"github.com/opencars/edrmvs/pkg/domain/registration"
+	"github.com/opencars/edrmvs/pkg/domain/service"
 	"github.com/opencars/edrmvs/pkg/hsc"
 	"github.com/opencars/edrmvs/pkg/logger"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
@@ -34,7 +34,7 @@ func main() {
 	}
 
 	p := hsc.NewProvider(hsc.New(&conf.HSC))
-	r := registration.NewService(s, p)
+	r := service.NewInternalService(s, p)
 
 	addr := ":" + strconv.Itoa(*port)
 	api := grpc.New(addr, r)

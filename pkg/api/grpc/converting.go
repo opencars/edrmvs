@@ -6,10 +6,10 @@ import (
 	"github.com/opencars/grpc/pkg/common"
 	"github.com/opencars/grpc/pkg/registration"
 
-	"github.com/opencars/edrmvs/pkg/domain"
+	"github.com/opencars/edrmvs/pkg/domain/model"
 )
 
-func FromDomain(r *domain.Registration) *registration.Record {
+func FromDomain(r *model.Registration) *registration.Record {
 	item := registration.Record{
 		Code:   r.Code,
 		Number: r.Number,
@@ -58,7 +58,7 @@ func FromDomain(r *domain.Registration) *registration.Record {
 	}
 
 	if r.Date != nil {
-		date, _ := time.Parse(domain.DateLayout, *r.Date)
+		date, _ := time.Parse(model.DateLayout, *r.Date)
 		item.Date = &common.Date{
 			Year:  int32(date.Year()),
 			Month: int32(date.Month()),
@@ -67,7 +67,7 @@ func FromDomain(r *domain.Registration) *registration.Record {
 	}
 
 	if r.FirstRegDate != nil {
-		date, _ := time.Parse(domain.DateLayout, *r.FirstRegDate)
+		date, _ := time.Parse(model.DateLayout, *r.FirstRegDate)
 		item.FirstRegDate = &common.Date{
 			Year:  int32(date.Year()),
 			Month: int32(date.Month()),

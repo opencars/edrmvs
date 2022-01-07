@@ -10,7 +10,7 @@ default: clean build
 build: $(APPS)
 
 $(BLDDIR)/%:
-	go build --race $(LDFLAGS) -o $@ ./cmd/$*
+	go build $(LDFLAGS) -o $@ ./cmd/$*
 
 $(APPS): %: $(BLDDIR)/%
 

@@ -14,7 +14,7 @@ import (
 )
 
 // Start starts the server with specified store.
-func Start(ctx context.Context, addr string, conf *config.Server, svc domain.RegistrationService) error {
+func Start(ctx context.Context, addr string, conf *config.Server, svc domain.CustomerService) error {
 	s := newServer(svc)
 
 	srv := http.Server{

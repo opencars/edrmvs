@@ -9,8 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-
-	domain "github.com/opencars/edrmvs/pkg/domain"
+	model "github.com/opencars/edrmvs/pkg/domain/model"
 )
 
 // MockFullRegistrationStore is a mock of FullRegistrationStore interface.
@@ -52,7 +51,7 @@ func (mr *MockFullRegistrationStoreMockRecorder) AllSeries(arg0 interface{}) *go
 }
 
 // Create mocks base method.
-func (m *MockFullRegistrationStore) Create(arg0 context.Context, arg1 *domain.Registration) error {
+func (m *MockFullRegistrationStore) Create(arg0 context.Context, arg1 *model.Registration) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", arg0, arg1)
 	ret0, _ := ret[0].(error)
@@ -66,10 +65,10 @@ func (mr *MockFullRegistrationStoreMockRecorder) Create(arg0, arg1 interface{}) 
 }
 
 // FindByCode mocks base method.
-func (m *MockFullRegistrationStore) FindByCode(arg0 context.Context, arg1 string) (*domain.Registration, error) {
+func (m *MockFullRegistrationStore) FindByCode(arg0 context.Context, arg1 string) (*model.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByCode", arg0, arg1)
-	ret0, _ := ret[0].(*domain.Registration)
+	ret0, _ := ret[0].(*model.Registration)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -81,10 +80,10 @@ func (mr *MockFullRegistrationStoreMockRecorder) FindByCode(arg0, arg1 interface
 }
 
 // FindByNumber mocks base method.
-func (m *MockFullRegistrationStore) FindByNumber(arg0 context.Context, arg1 string) ([]domain.Registration, error) {
+func (m *MockFullRegistrationStore) FindByNumber(arg0 context.Context, arg1 string) ([]model.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByNumber", arg0, arg1)
-	ret0, _ := ret[0].([]domain.Registration)
+	ret0, _ := ret[0].([]model.Registration)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -96,10 +95,10 @@ func (mr *MockFullRegistrationStoreMockRecorder) FindByNumber(arg0, arg1 interfa
 }
 
 // FindByVIN mocks base method.
-func (m *MockFullRegistrationStore) FindByVIN(arg0 context.Context, arg1 string) ([]domain.Registration, error) {
+func (m *MockFullRegistrationStore) FindByVIN(arg0 context.Context, arg1 string) ([]model.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByVIN", arg0, arg1)
-	ret0, _ := ret[0].([]domain.Registration)
+	ret0, _ := ret[0].([]model.Registration)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -111,10 +110,10 @@ func (mr *MockFullRegistrationStoreMockRecorder) FindByVIN(arg0, arg1 interface{
 }
 
 // FindLastBySeries mocks base method.
-func (m *MockFullRegistrationStore) FindLastBySeries(arg0 context.Context, arg1 string) (*domain.Registration, error) {
+func (m *MockFullRegistrationStore) FindLastBySeries(arg0 context.Context, arg1 string) (*model.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindLastBySeries", arg0, arg1)
-	ret0, _ := ret[0].(*domain.Registration)
+	ret0, _ := ret[0].(*model.Registration)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -2,24 +2,24 @@ package http
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 	"runtime"
 
 	"github.com/gorilla/mux"
+	"github.com/opencars/httputil"
 
 	"github.com/opencars/edrmvs/pkg/domain"
-	"github.com/opencars/edrmvs/pkg/handler"
+	"github.com/opencars/edrmvs/pkg/domain/query"
 	"github.com/opencars/edrmvs/pkg/version"
 )
 
 type server struct {
 	router *mux.Router
 
-	svc domain.RegistrationService
+	svc domain.CustomerService
 }
 
-func newServer(svc domain.RegistrationService) *server {
+func newServer(svc domain.CustomerService) *server {
 	srv := server{
 		router: mux.NewRouter(),
 		svc:    svc,
@@ -30,7 +30,7 @@ func newServer(svc domain.RegistrationService) *server {
 	return &srv
 }
 
-func (*server) Version() handler.Handler {
+func (*server) Version() httputil.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		v := struct {
 			Version string `json:"version"`
@@ -44,7 +44,7 @@ func (*server) Version() handler.Handler {
 	}
 }
 
-func (s *server) Health() handler.Handler {
+func (s *server) Health() httputil.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		if err := s.svc.Health(r.Context()); err != nil {
 			return err
@@ -54,45 +54,48 @@ func (s *server) Health() handler.Handler {
 	}
 }
 
-func (s *server) FindByVIN(v2 bool) handler.Handler {
+func (s *server) FindByVIN(v2 bool) httputil.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		registrations, err := s.svc.FindByVIN(r.Context(), r.URL.Query().Get("vin"), v2)
-		if errors.Is(err, domain.ErrBadVIN) {
-			return handler.ErrBadVIN
+		q := query.ListByVIN{
+			UserID: UserIDFromContext(r.Context()),
+			VIN:    r.URL.Query().Get("vin"),
 		}
 
+		registrations, err := s.svc.ListByVIN(r.Context(), &q, v2)
 		if err != nil {
-			return err
+			return handleErr(err)
 		}
 
 		return json.NewEncoder(w).Encode(registrations)
 	}
 }
 
-func (s *server) FindByNumber() handler.Handler {
+func (s *server) FindByNumber() httputil.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		registrations, err := s.svc.FindByNumber(r.Context(), r.URL.Query().Get("number"))
-		if errors.Is(err, domain.ErrBadNumber) {
-			return handler.ErrBadNumber
+		q := query.ListByNumber{
+			UserID: UserIDFromContext(r.Context()),
+			Number: r.URL.Query().Get("number"),
 		}
 
+		registrations, err := s.svc.ListByNumber(r.Context(), &q)
 		if err != nil {
-			return err
+			return handleErr(err)
 		}
 
 		return json.NewEncoder(w).Encode(registrations)
 	}
 }
 
-func (s *server) FindByCode() handler.Handler {
+func (s *server) FindByCode() httputil.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		registration, err := s.svc.FindByCode(r.Context(), mux.Vars(r)["code"])
-		if errors.Is(err, domain.ErrBadCode) {
-			return handler.ErrBadCode
+		q := query.DetailsByCode{
+			UserID: UserIDFromContext(r.Context()),
+			Code:   mux.Vars(r)["code"],
 		}
 
+		registration, err := s.svc.DetailsByCode(r.Context(), &q)
 		if err != nil {
-			return err
+			return handleErr(err)
 		}
 
 		return json.NewEncoder(w).Encode(registration)

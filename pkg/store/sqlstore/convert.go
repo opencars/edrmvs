@@ -1,11 +1,9 @@
 package sqlstore
 
-import (
-	"github.com/opencars/edrmvs/pkg/domain"
-)
+import "github.com/opencars/edrmvs/pkg/domain/model"
 
-func convertToDomain(from *Registration) *domain.Registration {
-	result := domain.Registration{
+func convertToDomain(from *Registration) *model.Registration {
+	result := model.Registration{
 		Brand:          from.Brand,
 		Capacity:       from.Capacity,
 		Color:          from.Color,
@@ -38,7 +36,7 @@ func convertToDomain(from *Registration) *domain.Registration {
 	return &result
 }
 
-func convertFromDomain(from *domain.Registration) *Registration {
+func convertFromDomain(from *model.Registration) *Registration {
 	result := Registration{
 		Brand:        from.Brand,
 		Capacity:     from.Capacity,

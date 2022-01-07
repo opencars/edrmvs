@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/opencars/edrmvs/pkg/domain"
+	"github.com/opencars/edrmvs/pkg/domain/model"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
 )
 
@@ -15,7 +15,7 @@ func TestRegistrationRepository_Create(t *testing.T) {
 	s, teardown := sqlstore.TestDB(t, conf)
 	defer teardown("registrations")
 
-	registration := domain.TestRegistration(t)
+	registration := model.TestRegistration(t)
 	require.NoError(t, s.Create(context.Background(), registration))
 }
 
@@ -23,7 +23,7 @@ func TestRegistrationRepository_FindByNumber(t *testing.T) {
 	s, teardown := sqlstore.TestDB(t, conf)
 	defer teardown("registrations")
 
-	registration := domain.TestRegistration(t)
+	registration := model.TestRegistration(t)
 	require.NoError(t, s.Create(context.Background(), registration))
 
 	actual, err := s.FindByNumber(context.Background(), registration.Number)
@@ -38,7 +38,7 @@ func TestRegistrationRepository_FindByCode(t *testing.T) {
 	s, teardown := sqlstore.TestDB(t, conf)
 	defer teardown("registrations")
 
-	registration := domain.TestRegistration(t)
+	registration := model.TestRegistration(t)
 	require.NoError(t, s.Create(context.Background(), registration))
 
 	actual, err := s.FindByCode(context.Background(), registration.Code)
@@ -52,7 +52,7 @@ func TestRegistrationRepository_FindByVIN(t *testing.T) {
 	s, teardown := sqlstore.TestDB(t, conf)
 	defer teardown("registrations")
 
-	registration := domain.TestRegistration(t)
+	registration := model.TestRegistration(t)
 	require.NoError(t, s.Create(context.Background(), registration))
 
 	actual, err := s.FindByVIN(context.Background(), *registration.VIN)

@@ -9,8 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-
-	domain "github.com/opencars/edrmvs/pkg/domain"
+	model "github.com/opencars/edrmvs/pkg/domain/model"
 )
 
 // MockRegistrationProvider is a mock of RegistrationProvider interface.
@@ -37,10 +36,10 @@ func (m *MockRegistrationProvider) EXPECT() *MockRegistrationProviderMockRecorde
 }
 
 // FindByCode mocks base method.
-func (m *MockRegistrationProvider) FindByCode(arg0 context.Context, arg1 string) ([]domain.Registration, error) {
+func (m *MockRegistrationProvider) FindByCode(arg0 context.Context, arg1 string) ([]model.Registration, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByCode", arg0, arg1)
-	ret0, _ := ret[0].([]domain.Registration)
+	ret0, _ := ret[0].([]model.Registration)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

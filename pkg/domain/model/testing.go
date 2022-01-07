@@ -1,6 +1,8 @@
-package domain
+package model
 
-import "testing"
+import (
+	"testing"
+)
 
 // TestRegistration returns example registration.
 func TestRegistration(t *testing.T) *Registration {

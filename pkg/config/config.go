@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
 	"gopkg.in/yaml.v2"
@@ -12,6 +13,7 @@ type Settings struct {
 	DB        Database  `yaml:"database"`
 	HSC       HSC       `yaml:"hsc"`
 	Extractor Extractor `yaml:"extractor"`
+	NATS      NATS      `yaml:"nats"`
 }
 
 // Server represents settings for creating http server.
@@ -46,6 +48,23 @@ type HSC struct {
 type Extractor struct {
 	Delay   Duration `yaml:"delay"`
 	BackOff Duration `yaml:"backoff"`
+}
+
+// NATS contains configuration details for application event API.
+type NATS struct {
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+}
+
+// Address returns calculated address for connecting to NATS.
+func (nats *NATS) Address() string {
+	if nats.User != "" && nats.Password != "" {
+		return fmt.Sprintf("nats://%s:%s@%s:%d", nats.User, nats.Password, nats.Host, nats.Port)
+	}
+
+	return fmt.Sprintf("nats://%s:%d", nats.Host, nats.Port)
 }
 
 // New reads application configuration from specified file path.
