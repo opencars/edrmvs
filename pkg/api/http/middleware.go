@@ -17,17 +17,17 @@ func AuthorizationMiddleware() mux.MiddlewareFunc {
 		return httputil.Handler(func(w http.ResponseWriter, r *http.Request) error {
 			userID := r.Header.Get(HeaderUserID)
 			if userID == "" {
-				return errors.New("admin: expected admin id")
+				return errors.New("auth: expected user id")
 			}
 
 			tokenID := r.Header.Get(HeaderTokenID)
 			if tokenID == "" {
-				return errors.New("admin: expected admin session id")
+				return errors.New("auth: expected token id")
 			}
 
 			tokenName := r.Header.Get(HeaderTokenName)
 			if tokenName == "" {
-				return errors.New("admin: expected admin tenant id")
+				return errors.New("auth: expected token name")
 			}
 
 			ctx := WithUserID(r.Context(), userID)

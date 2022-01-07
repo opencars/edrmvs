@@ -14,7 +14,7 @@ import (
 	"github.com/opencars/edrmvs/pkg/domain/service"
 )
 
-func TestCustomerService_ListByNumber(t *testing.T) {
+func TestInternalService_ListByNumber(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -25,11 +25,8 @@ func TestCustomerService_ListByNumber(t *testing.T) {
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByNumber(gomock.Any(), expected[0].Number).Return(expected, nil)
 
-	producer := mocks.NewMockProducer(ctrl)
-	producer.EXPECT().Produce(gomock.Any(), gomock.Any()).Return(nil)
-
-	svc := service.NewCustomerService(store, nil, producer)
-	actual, err := svc.ListByNumber(context.Background(), &query.ListByNumber{Number: expected[0].Number})
+	svc := service.NewInternalService(store, nil)
+	actual, err := svc.ListByNumber(context.Background(), &query.ListWithNumberByInternal{Number: expected[0].Number})
 	require.NoError(t, err)
 
 	assert.Len(t, actual, 1)
@@ -38,7 +35,7 @@ func TestCustomerService_ListByNumber(t *testing.T) {
 	assert.Equal(t, expected[0].VIN, actual[0].VIN)
 }
 
-func TestCustomerService_ListByVIN(t *testing.T) {
+func TestInternalService_ListByVIN(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -49,11 +46,11 @@ func TestCustomerService_ListByVIN(t *testing.T) {
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByVIN(gomock.Any(), *expected[0].VIN).Return(expected, nil)
 
-	producer := mocks.NewMockProducer(ctrl)
-	producer.EXPECT().Produce(gomock.Any(), gomock.Any()).Return(nil)
+	provider := mocks.NewMockRegistrationProvider(ctrl)
+	provider.EXPECT().FindByCode(gomock.All(), expected[0].Code).Return(expected, nil)
 
-	svc := service.NewCustomerService(store, nil, producer)
-	actual, err := svc.ListByVIN(context.Background(), &query.ListByVIN{VIN: *expected[0].VIN}, false)
+	svc := service.NewInternalService(store, provider)
+	actual, err := svc.ListByVIN(context.Background(), &query.ListWithVINByInternal{VIN: *expected[0].VIN})
 	require.NoError(t, err)
 
 	assert.Len(t, actual, 1)
@@ -62,7 +59,7 @@ func TestCustomerService_ListByVIN(t *testing.T) {
 	assert.Equal(t, expected[0].VIN, actual[0].VIN)
 }
 
-func TestCustomerService_DetailsByCode(t *testing.T) {
+func TestInternalService_DetailsByCode(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -71,11 +68,8 @@ func TestCustomerService_DetailsByCode(t *testing.T) {
 	store := mocks.NewMockRegistrationStore(ctrl)
 	store.EXPECT().FindByCode(gomock.Any(), expected.Code).Return(expected, nil)
 
-	producer := mocks.NewMockProducer(ctrl)
-	producer.EXPECT().Produce(gomock.Any(), gomock.Any()).Return(nil)
-
-	svc := service.NewCustomerService(store, nil, producer)
-	actual, err := svc.DetailsByCode(context.Background(), &query.DetailsByCode{Code: expected.Code})
+	svc := service.NewInternalService(store, nil)
+	actual, err := svc.DetailsByCode(context.Background(), &query.DetailsWithCodeByInternal{Code: expected.Code})
 	require.NoError(t, err)
 
 	assert.Equal(t, expected.Code, actual.Code)

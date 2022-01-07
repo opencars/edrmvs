@@ -51,6 +51,10 @@ func (s *CustomerService) ListByVIN(ctx context.Context, q *query.ListByVIN, v2 
 	}
 
 	if !v2 {
+		if err := s.producer.Produce(ctx, q.Event(registrations...)); err != nil {
+			return nil, err
+		}
+
 		return registrations, nil
 	}
 
