@@ -32,14 +32,13 @@ func (q *DetailsByCode) Event(registration *model.Registration) schema.Producabl
 	if registration != nil {
 		resultAmount = 1
 	}
-
 	msg := vehicle.RegistrationSearched{
 		UserId:       q.UserID,
 		Code:         q.Code,
 		ResultAmount: resultAmount,
 	}
 
-	return schema.NewMessage(&msg).WithOptions(
+	return schema.New(&source, &msg).Message(
 		schema.WithSubject(schema.RegistrationCustomerActions),
 	)
 }

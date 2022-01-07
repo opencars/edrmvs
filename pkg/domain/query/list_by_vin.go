@@ -81,7 +81,7 @@ func (q *ListByVIN) Event(registrations ...model.Registration) schema.Producable
 		ResultAmount: uint32(len(registrations)),
 	}
 
-	return schema.NewMessage(&msg).WithOptions(
+	return schema.New(&source, &msg).Message(
 		schema.WithSubject(schema.RegistrationCustomerActions),
 	)
 }
