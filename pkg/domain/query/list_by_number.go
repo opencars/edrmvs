@@ -82,6 +82,6 @@ func (q *ListByNumber) Event(registrations ...model.Registration) schema.Produca
 	}
 
 	return schema.New(&source, &msg).Message(
-		schema.WithSubject(schema.RegistrationCustomerActions),
+		schema.WithSubject(schema.CustomerRegistrationActions),
 	)
 }

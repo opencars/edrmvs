@@ -82,6 +82,6 @@ func (q *ListByVIN) Event(registrations ...model.Registration) schema.Producable
 	}
 
 	return schema.New(&source, &msg).Message(
-		schema.WithSubject(schema.RegistrationCustomerActions),
+		schema.WithSubject(schema.CustomerRegistrationActions),
 	)
 }
