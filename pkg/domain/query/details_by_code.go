@@ -1,7 +1,10 @@
 package query
 
 import (
+	"time"
+
 	validation "github.com/go-ozzo/ozzo-validation"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/opencars/schema"
 	"github.com/opencars/schema/vehicle"
@@ -38,6 +41,7 @@ func (q *DetailsByCode) Event(registration *model.Registration) schema.Producabl
 		UserId:       q.UserID,
 		Code:         q.Code,
 		ResultAmount: resultAmount,
+		SearchedAt:   timestamppb.New(time.Now().UTC()),
 	}
 
 	return schema.New(&source, &msg).Message(

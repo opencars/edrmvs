@@ -2,11 +2,13 @@ package query
 
 import (
 	"strconv"
+	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/opencars/schema"
 	"github.com/opencars/schema/vehicle"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/opencars/edrmvs/pkg/domain/model"
 )
@@ -79,6 +81,7 @@ func (q *ListByVIN) Event(registrations ...model.Registration) schema.Producable
 		UserId:       q.UserID,
 		Vin:          q.VIN,
 		ResultAmount: uint32(len(registrations)),
+		SearchedAt:   timestamppb.New(time.Now().UTC()),
 	}
 
 	return schema.New(&source, &msg).Message(
