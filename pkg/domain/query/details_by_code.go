@@ -2,6 +2,7 @@ package query
 
 import (
 	validation "github.com/go-ozzo/ozzo-validation"
+
 	"github.com/opencars/schema"
 	"github.com/opencars/schema/vehicle"
 
@@ -39,7 +40,7 @@ func (q *DetailsByCode) Event(registration *model.Registration) schema.Producabl
 		ResultAmount: resultAmount,
 	}
 
-	return schema.NewMessage(&msg).WithOptions(
-		schema.WithSubject(schema.RegistrationCustomerActions),
+	return schema.New(&source, &msg).Message(
+		schema.WithSubject(schema.CustomerRegistrationActions),
 	)
 }

@@ -11,7 +11,7 @@ require (
 	github.com/lib/pq v1.10.4
 	github.com/opencars/grpc v0.0.6
 	github.com/opencars/httputil v0.0.2
-	github.com/opencars/schema v0.0.1
+	github.com/opencars/schema v0.0.4
 	github.com/opencars/translit v0.1.2
 	github.com/rs/zerolog v1.26.1
 	github.com/stretchr/testify v1.7.0

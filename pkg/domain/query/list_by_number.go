@@ -81,7 +81,7 @@ func (q *ListByNumber) Event(registrations ...model.Registration) schema.Produca
 		ResultAmount: uint32(len(registrations)),
 	}
 
-	return schema.NewMessage(&msg).WithOptions(
-		schema.WithSubject(schema.RegistrationCustomerActions),
+	return schema.New(&source, &msg).Message(
+		schema.WithSubject(schema.CustomerRegistrationActions),
 	)
 }
