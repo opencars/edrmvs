@@ -1,6 +1,7 @@
 package query
 
 import (
+	"strings"
 	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -8,25 +9,35 @@ import (
 
 	"github.com/opencars/schema"
 	"github.com/opencars/schema/vehicle"
+	"github.com/opencars/translit"
 
 	"github.com/opencars/edrmvs/pkg/domain/model"
 )
 
 type DetailsByCode struct {
-	UserID string
-	Code   string
+	UserID  string
+	TokenID string
+	Code    string
+}
+
+func (q *DetailsByCode) Prepare() {
+	q.Code = translit.ToLatin(strings.ToUpper(q.Code))
 }
 
 func (q *DetailsByCode) Validate() error {
 	return validation.ValidateStruct(q,
 		validation.Field(
 			&q.UserID,
-			validation.Required.Error("required"),
+			validation.Required.Error(model.Required),
+		),
+		validation.Field(
+			&q.TokenID,
+			validation.Required.Error(model.Required),
 		),
 		validation.Field(
 			&q.Code,
-			validation.Required.Error("required"),
-			validation.Length(9, 9).Error("invalid"),
+			validation.Required.Error(model.Required),
+			validation.Length(9, 9).Error(model.Invalid),
 		),
 	)
 }

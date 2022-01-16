@@ -57,8 +57,9 @@ func (s *server) Health() httputil.Handler {
 func (s *server) FindByVIN(v2 bool) httputil.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		q := query.ListByVIN{
-			UserID: UserIDFromContext(r.Context()),
-			VIN:    r.URL.Query().Get("vin"),
+			UserID:  UserIDFromContext(r.Context()),
+			TokenID: TokenIDromContext(r.Context()),
+			VIN:     r.URL.Query().Get("vin"),
 		}
 
 		registrations, err := s.svc.ListByVIN(r.Context(), &q, v2)
@@ -73,8 +74,9 @@ func (s *server) FindByVIN(v2 bool) httputil.Handler {
 func (s *server) FindByNumber() httputil.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		q := query.ListByNumber{
-			UserID: UserIDFromContext(r.Context()),
-			Number: r.URL.Query().Get("number"),
+			UserID:  UserIDFromContext(r.Context()),
+			TokenID: TokenIDromContext(r.Context()),
+			Number:  r.URL.Query().Get("number"),
 		}
 
 		registrations, err := s.svc.ListByNumber(r.Context(), &q)
@@ -89,8 +91,9 @@ func (s *server) FindByNumber() httputil.Handler {
 func (s *server) FindByCode() httputil.Handler {
 	return func(w http.ResponseWriter, r *http.Request) error {
 		q := query.DetailsByCode{
-			UserID: UserIDFromContext(r.Context()),
-			Code:   mux.Vars(r)["code"],
+			UserID:  UserIDFromContext(r.Context()),
+			TokenID: TokenIDromContext(r.Context()),
+			Code:    mux.Vars(r)["code"],
 		}
 
 		registration, err := s.svc.DetailsByCode(r.Context(), &q)

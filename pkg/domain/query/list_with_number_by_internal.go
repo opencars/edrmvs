@@ -2,15 +2,22 @@ package query
 
 import (
 	"strconv"
+	"strings"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
+
+	"github.com/opencars/translit"
 )
 
 type ListWithNumberByInternal struct {
 	Number string
 	Limit  string
 	Offset string
+}
+
+func (q *ListWithNumberByInternal) Prepare() {
+	q.Number = translit.ToLatin(strings.ToUpper(q.Number))
 }
 
 func (q *ListWithNumberByInternal) GetOffset() uint64 {

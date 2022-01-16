@@ -29,7 +29,14 @@ func TestCustomerService_ListByNumber(t *testing.T) {
 	producer.EXPECT().Produce(gomock.Any(), gomock.Any()).Return(nil)
 
 	svc := service.NewCustomerService(store, nil, producer)
-	actual, err := svc.ListByNumber(context.Background(), &query.ListByNumber{Number: expected[0].Number})
+
+	q := query.ListByNumber{
+		UserID:  "ec6312fd-f033-41f3-94cb-3acdbaa19cb5",
+		TokenID: "56beb1fb-3e60-4ddb-849c-68a543bdfc39",
+		Number:  expected[0].Number,
+	}
+
+	actual, err := svc.ListByNumber(context.Background(), &q)
 	require.NoError(t, err)
 
 	assert.Len(t, actual, 1)
@@ -53,7 +60,14 @@ func TestCustomerService_ListByVIN(t *testing.T) {
 	producer.EXPECT().Produce(gomock.Any(), gomock.Any()).Return(nil)
 
 	svc := service.NewCustomerService(store, nil, producer)
-	actual, err := svc.ListByVIN(context.Background(), &query.ListByVIN{VIN: *expected[0].VIN}, false)
+
+	q := query.ListByVIN{
+		UserID:  "ec6312fd-f033-41f3-94cb-3acdbaa19cb5",
+		TokenID: "56beb1fb-3e60-4ddb-849c-68a543bdfc39",
+		VIN:     *expected[0].VIN,
+	}
+
+	actual, err := svc.ListByVIN(context.Background(), &q, false)
 	require.NoError(t, err)
 
 	assert.Len(t, actual, 1)
@@ -75,7 +89,14 @@ func TestCustomerService_DetailsByCode(t *testing.T) {
 	producer.EXPECT().Produce(gomock.Any(), gomock.Any()).Return(nil)
 
 	svc := service.NewCustomerService(store, nil, producer)
-	actual, err := svc.DetailsByCode(context.Background(), &query.DetailsByCode{Code: expected.Code})
+
+	q := query.DetailsByCode{
+		UserID:  "ec6312fd-f033-41f3-94cb-3acdbaa19cb5",
+		TokenID: "56beb1fb-3e60-4ddb-849c-68a543bdfc39",
+		Code:    expected.Code,
+	}
+
+	actual, err := svc.DetailsByCode(context.Background(), &q)
 	require.NoError(t, err)
 
 	assert.Equal(t, expected.Code, actual.Code)

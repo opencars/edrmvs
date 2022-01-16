@@ -50,8 +50,9 @@ func TestServer_FindByNumber(t *testing.T) {
 	for i := range tests {
 		t.Run(tests[i].name, func(t *testing.T) {
 			query := query.ListByNumber{
-				UserID: "aeda406c-1f27-47e0-a1de-c0ec2a339206",
-				Number: tests[i].number,
+				UserID:  "aeda406c-1f27-47e0-a1de-c0ec2a339206",
+				TokenID: "befb8aeb-922e-45e0-b89a-c936200a455c",
+				Number:  tests[i].number,
 			}
 
 			svc := mocks.NewMockCustomerService(ctrl)
@@ -111,8 +112,9 @@ func TestServer_FindByVIN(t *testing.T) {
 	for i := range tests {
 		t.Run(tests[i].name, func(t *testing.T) {
 			query := query.ListByVIN{
-				UserID: "aeda406c-1f27-47e0-a1de-c0ec2a339206",
-				VIN:    tests[i].vin,
+				UserID:  "aeda406c-1f27-47e0-a1de-c0ec2a339206",
+				TokenID: "befb8aeb-922e-45e0-b89a-c936200a455c",
+				VIN:     tests[i].vin,
 			}
 
 			svc := mocks.NewMockCustomerService(ctrl)
@@ -170,8 +172,9 @@ func TestServer_FindByCode(t *testing.T) {
 	for i := range tests {
 		t.Run(tests[i].name, func(t *testing.T) {
 			query := query.DetailsByCode{
-				UserID: "aeda406c-1f27-47e0-a1de-c0ec2a339206",
-				Code:   tests[i].code,
+				UserID:  "aeda406c-1f27-47e0-a1de-c0ec2a339206",
+				TokenID: "befb8aeb-922e-45e0-b89a-c936200a455c",
+				Code:    tests[i].code,
 			}
 
 			svc := mocks.NewMockCustomerService(ctrl)
