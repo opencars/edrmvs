@@ -91,6 +91,7 @@ func (q *ListByVIN) Validate() error {
 func (q *ListByVIN) Event(registrations ...model.Registration) schema.Producable {
 	msg := vehicle.RegistrationSearched{
 		UserId:       q.UserID,
+		TokenId:      q.TokenID,
 		Vin:          q.VIN,
 		ResultAmount: uint32(len(registrations)),
 		SearchedAt:   timestamppb.New(time.Now().UTC()),

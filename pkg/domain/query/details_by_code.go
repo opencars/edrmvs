@@ -50,6 +50,7 @@ func (q *DetailsByCode) Event(registration *model.Registration) schema.Producabl
 
 	msg := vehicle.RegistrationSearched{
 		UserId:       q.UserID,
+		TokenId:      q.TokenID,
 		Code:         q.Code,
 		ResultAmount: resultAmount,
 		SearchedAt:   timestamppb.New(time.Now().UTC()),
