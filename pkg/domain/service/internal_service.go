@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"strings"
 
 	"github.com/opencars/translit"
 
@@ -25,15 +24,19 @@ func NewInternalService(s domain.RegistrationStore, p domain.RegistrationProvide
 }
 
 func (s *InternalService) ListByNumber(ctx context.Context, q *query.ListWithNumberByInternal) ([]model.Registration, error) {
-	number := translit.ToLatin(strings.ToUpper(q.Number))
+	if err := query.Process(q); err != nil {
+		return nil, err
+	}
 
-	return s.s.FindByNumber(ctx, number)
+	return s.s.FindByNumber(ctx, q.Number)
 }
 
 func (s *InternalService) ListByVIN(ctx context.Context, q *query.ListWithVINByInternal) ([]model.Registration, error) {
-	vin := translit.ToLatin(strings.ToUpper(q.VIN))
+	if err := query.Process(q); err != nil {
+		return nil, err
+	}
 
-	registrations, err := s.s.FindByVIN(ctx, vin)
+	registrations, err := s.s.FindByVIN(ctx, q.VIN)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +64,9 @@ func (s *InternalService) ListByVIN(ctx context.Context, q *query.ListWithVINByI
 }
 
 func (s *InternalService) DetailsByCode(ctx context.Context, q *query.DetailsWithCodeByInternal) (*model.Registration, error) {
-	code := translit.ToLatin(strings.ToUpper(q.Code))
+	if err := query.Process(q); err != nil {
+		return nil, err
+	}
 
-	return s.s.FindByCode(ctx, code)
+	return s.s.FindByCode(ctx, q.Code)
 }

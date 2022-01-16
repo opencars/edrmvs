@@ -2,15 +2,22 @@ package query
 
 import (
 	"strconv"
+	"strings"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
+
+	"github.com/opencars/translit"
 )
 
 type ListWithVINByInternal struct {
 	VIN    string
 	Limit  string
 	Offset string
+}
+
+func (q *ListWithVINByInternal) Prepare() {
+	q.VIN = translit.ToLatin(strings.ToUpper(q.VIN))
 }
 
 func (q *ListWithVINByInternal) GetOffset() uint64 {

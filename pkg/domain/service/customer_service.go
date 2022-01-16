@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"strings"
 
 	"github.com/opencars/schema"
 	"github.com/opencars/translit"
@@ -28,9 +27,11 @@ func NewCustomerService(s domain.RegistrationStore, p domain.RegistrationProvide
 }
 
 func (s *CustomerService) ListByNumber(ctx context.Context, q *query.ListByNumber) ([]model.Registration, error) {
-	number := translit.ToLatin(strings.ToUpper(q.Number))
+	if err := query.Process(q); err != nil {
+		return nil, err
+	}
 
-	registrations, err := s.s.FindByNumber(ctx, number)
+	registrations, err := s.s.FindByNumber(ctx, q.Number)
 	if err != nil {
 		return nil, err
 	}
@@ -43,9 +44,11 @@ func (s *CustomerService) ListByNumber(ctx context.Context, q *query.ListByNumbe
 }
 
 func (s *CustomerService) ListByVIN(ctx context.Context, q *query.ListByVIN, v2 bool) ([]model.Registration, error) {
-	vin := translit.ToLatin(strings.ToUpper(q.VIN))
+	if err := query.Process(q); err != nil {
+		return nil, err
+	}
 
-	registrations, err := s.s.FindByVIN(ctx, vin)
+	registrations, err := s.s.FindByVIN(ctx, q.VIN)
 	if err != nil {
 		return nil, err
 	}
@@ -85,9 +88,11 @@ func (s *CustomerService) ListByVIN(ctx context.Context, q *query.ListByVIN, v2 
 }
 
 func (s *CustomerService) DetailsByCode(ctx context.Context, q *query.DetailsByCode) (*model.Registration, error) {
-	code := translit.ToLatin(strings.ToUpper(q.Code))
+	if err := query.Process(q); err != nil {
+		return nil, err
+	}
 
-	registration, err := s.s.FindByCode(ctx, code)
+	registration, err := s.s.FindByCode(ctx, q.Code)
 	if err != nil {
 		return nil, err
 	}

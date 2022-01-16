@@ -1,11 +1,18 @@
 package query
 
 import (
+	"strings"
+
 	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/opencars/translit"
 )
 
 type DetailsWithCodeByInternal struct {
 	Code string
+}
+
+func (q *DetailsWithCodeByInternal) Prepare() {
+	q.Code = translit.ToLatin(strings.ToUpper(q.Code))
 }
 
 func (q *DetailsWithCodeByInternal) Validate() error {

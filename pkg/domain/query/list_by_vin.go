@@ -2,22 +2,30 @@ package query
 
 import (
 	"strconv"
+	"strings"
 	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	"github.com/opencars/schema"
 	"github.com/opencars/schema/vehicle"
-	"google.golang.org/protobuf/types/known/timestamppb"
+	"github.com/opencars/translit"
 
 	"github.com/opencars/edrmvs/pkg/domain/model"
 )
 
 type ListByVIN struct {
-	UserID string
-	VIN    string
-	Limit  string
-	Offset string
+	UserID  string
+	TokenID string
+	VIN     string
+	Limit   string
+	Offset  string
+}
+
+func (q *ListByVIN) Prepare() {
+	q.VIN = translit.ToLatin(strings.ToUpper(q.VIN))
 }
 
 func (q *ListByVIN) GetLimit() uint64 {
@@ -58,20 +66,24 @@ func (q *ListByVIN) Validate() error {
 	return validation.ValidateStruct(q,
 		validation.Field(
 			&q.UserID,
-			validation.Required.Error("required"),
+			validation.Required.Error(model.Required),
+		),
+		validation.Field(
+			&q.TokenID,
+			validation.Required.Error(model.Required),
 		),
 		validation.Field(
 			&q.VIN,
-			validation.Required.Error("required"),
-			validation.Length(6, 18).Error("invalid"),
+			validation.Required.Error(model.Required),
+			validation.Length(6, 18).Error(model.Invalid),
 		),
 		validation.Field(
 			&q.Limit,
-			is.Int.Error("is_not_integer"),
+			is.Int.Error(model.IsNotInreger),
 		),
 		validation.Field(
 			&q.Offset,
-			is.Int.Error("is_not_integer"),
+			is.Int.Error(model.IsNotInreger),
 		),
 	)
 }
