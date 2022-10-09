@@ -76,7 +76,9 @@ type API struct {
 // New creates an instance of API wrapper.
 func New(conf *config.HSC) *API {
 	return &API{
-		client:   &http.Client{},
+		client: &http.Client{
+			Timeout: time.Second,
+		},
 		baseURL:  conf.BaseURL,
 		username: conf.Username,
 		password: conf.Password,
