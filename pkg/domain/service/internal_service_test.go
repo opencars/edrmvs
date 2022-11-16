@@ -47,7 +47,7 @@ func TestInternalService_ListByVIN(t *testing.T) {
 	store.EXPECT().FindByVIN(gomock.Any(), *expected[0].VIN).Return(expected, nil)
 
 	provider := mocks.NewMockRegistrationProvider(ctrl)
-	provider.EXPECT().FindByCode(gomock.All(), expected[0].Code).Return(expected, nil)
+	// provider.EXPECT().FindByCode(gomock.All(), expected[0].Code).Return(expected, nil)
 
 	svc := service.NewInternalService(store, provider)
 	actual, err := svc.ListByVIN(context.Background(), &query.ListWithVINByInternal{VIN: *expected[0].VIN})
