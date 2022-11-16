@@ -1,6 +1,6 @@
 module github.com/opencars/edrmvs
 
-go 1.17
+go 1.19
 
 require (
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
@@ -12,8 +12,8 @@ require (
 	github.com/opencars/grpc v0.0.6
 	github.com/opencars/httputil v0.0.2
 	github.com/opencars/schema v0.0.7
+	github.com/opencars/seedwork v0.0.2
 	github.com/opencars/translit v0.1.2
-	github.com/rs/zerolog v1.26.1
 	github.com/stretchr/testify v1.7.0
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
 	google.golang.org/grpc v1.43.0
@@ -31,6 +31,7 @@ require (
 	github.com/nats-io/nkeys v0.3.0 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/rs/zerolog v1.26.1 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e // indirect
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect

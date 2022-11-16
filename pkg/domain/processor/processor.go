@@ -11,7 +11,7 @@ import (
 
 	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/model"
-	"github.com/opencars/edrmvs/pkg/logger"
+	"github.com/opencars/seedwork/logger"
 )
 
 const (

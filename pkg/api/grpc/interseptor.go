@@ -6,7 +6,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/opencars/edrmvs/pkg/logger"
+	"github.com/opencars/seedwork/logger"
 )
 
 // RequestLoggingInterceptor write request body to logs.

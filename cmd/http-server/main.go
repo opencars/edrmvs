@@ -11,8 +11,8 @@ import (
 	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/opencars/edrmvs/pkg/domain/service"
 	"github.com/opencars/edrmvs/pkg/hsc"
-	"github.com/opencars/edrmvs/pkg/logger"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
+	"github.com/opencars/seedwork/logger"
 
 	"github.com/opencars/schema/client"
 )
