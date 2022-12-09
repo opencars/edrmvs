@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/lib/pq v1.10.4
-	github.com/opencars/grpc v0.0.6
+	github.com/opencars/grpc v0.5.9
 	github.com/opencars/httputil v0.0.2
 	github.com/opencars/schema v0.0.7
 	github.com/opencars/seedwork v0.0.2

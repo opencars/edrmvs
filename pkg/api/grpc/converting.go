@@ -41,6 +41,10 @@ func FromDomain(r *model.Registration) *registration.Record {
 		item.Kind = *r.Kind
 	}
 
+	if r.Body != nil {
+		item.Body = *r.Body
+	}
+
 	if r.NumSeating != nil {
 		item.NumSeating = int32(*r.NumSeating)
 	}

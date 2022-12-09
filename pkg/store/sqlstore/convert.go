@@ -11,6 +11,7 @@ func convertToDomain(from *Registration) *model.Registration {
 		Date:           from.Date,
 		Fuel:           from.Fuel,
 		Kind:           from.Kind,
+		Body:           from.Body,
 		Year:           from.Year,
 		Model:          from.Model,
 		DocumentNumber: from.NDoc,

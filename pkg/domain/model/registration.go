@@ -17,6 +17,7 @@ type Registration struct {
 	Date           *string  `json:"date,omitempty"`
 	Fuel           *string  `json:"fuel,omitempty"`
 	Kind           *string  `json:"kind,omitempty"`
+	Body           *string  `json:"body,omitempty"`
 	Year           int      `json:"year"`
 	Model          *string  `json:"model,omitempty"`
 	DocumentNumber string   `json:"-"`

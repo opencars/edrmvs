@@ -8,6 +8,7 @@ type Registration struct {
 	Date         *string  `db:"d_reg"`
 	Fuel         *string  `db:"fuel"`
 	Kind         *string  `db:"kind"`
+	Body         *string  `db:"body"`
 	Year         int      `db:"make_year"`
 	Model        *string  `db:"model"`
 	NDoc         string   `db:"n_doc"`

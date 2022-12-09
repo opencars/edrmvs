@@ -37,7 +37,7 @@ func (s *RegistrationStore) FindByNumber(ctx context.Context, number string) ([]
 	records := make([]Registration, 0)
 
 	err := s.db.SelectContext(ctx, &records,
-		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind,
+		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind, body,
 			    make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
 			    n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
@@ -63,7 +63,7 @@ func (s *RegistrationStore) FindByCode(ctx context.Context, code string) (*model
 	var record Registration
 
 	err := s.db.GetContext(ctx, &record,
-		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind,
+		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind, body,
 			    make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
 			    n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
@@ -88,7 +88,7 @@ func (s *RegistrationStore) FindByVIN(ctx context.Context, vin string) ([]model.
 	records := make([]Registration, 0)
 
 	err := s.db.SelectContext(ctx, &records,
-		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind,
+		`SELECT brand, capacity, color, d_first_reg, d_reg, fuel, kind, body,
                 make_year, model, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
                 n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
@@ -116,7 +116,7 @@ func (s *RegistrationStore) FindLastBySeries(ctx context.Context, series string)
 	err := s.db.GetContext(ctx, &record,
 		`SELECT
 			brand, capacity, color, d_first_reg, d_reg, fuel,
-			kind, make_year, model, s_doc, n_doc, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
+			kind, body, make_year, model, s_doc, n_doc, CONCAT(s_doc, n_doc) as code, n_reg_new, n_seating,
 			n_standing, own_weight, rank_category, total_weight, vin
 		FROM registrations
 		WHERE s_doc = $1
