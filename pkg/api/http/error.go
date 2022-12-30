@@ -7,12 +7,10 @@ import (
 
 	"github.com/opencars/httputil"
 	"github.com/opencars/seedwork"
-
-	"github.com/opencars/edrmvs/pkg/domain/model"
 )
 
 func handleErr(err error) error {
-	var e model.Error
+	var e seedwork.Error
 	if errors.As(err, &e) {
 		return httputil.NewError(http.StatusBadRequest, e.Error())
 	}
