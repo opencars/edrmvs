@@ -3,10 +3,11 @@ package service
 import (
 	"context"
 
+	"github.com/opencars/seedwork"
+
 	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/model"
 	"github.com/opencars/edrmvs/pkg/domain/query"
-	"github.com/opencars/seedwork"
 )
 
 type InternalService struct {

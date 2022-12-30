@@ -9,9 +9,10 @@ import (
 
 	"github.com/opencars/translit"
 
+	"github.com/opencars/seedwork/logger"
+
 	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/model"
-	"github.com/opencars/seedwork/logger"
 )
 
 const (

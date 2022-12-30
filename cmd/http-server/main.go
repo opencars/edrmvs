@@ -7,12 +7,13 @@ import (
 	"strconv"
 	"syscall"
 
+	"github.com/opencars/seedwork/logger"
+
 	"github.com/opencars/edrmvs/pkg/api/http"
 	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/opencars/edrmvs/pkg/domain/service"
 	"github.com/opencars/edrmvs/pkg/hsc"
 	"github.com/opencars/edrmvs/pkg/store/sqlstore"
-	"github.com/opencars/seedwork/logger"
 
 	"github.com/opencars/schema/client"
 )

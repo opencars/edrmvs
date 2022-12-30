@@ -8,9 +8,10 @@ import (
 
 	"github.com/gorilla/handlers"
 
+	"github.com/opencars/seedwork/logger"
+
 	"github.com/opencars/edrmvs/pkg/config"
 	"github.com/opencars/edrmvs/pkg/domain"
-	"github.com/opencars/seedwork/logger"
 )
 
 // Start starts the server with specified store.

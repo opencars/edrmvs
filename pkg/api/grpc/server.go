@@ -3,8 +3,9 @@ package grpc
 import (
 	"context"
 
-	"github.com/opencars/edrmvs/pkg/domain/query"
 	"github.com/opencars/grpc/pkg/registration"
+
+	"github.com/opencars/edrmvs/pkg/domain/query"
 )
 
 type registrationHandler struct {
