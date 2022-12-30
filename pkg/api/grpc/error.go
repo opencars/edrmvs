@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/opencars/edrmvs/pkg/domain/model"
+	"github.com/opencars/seedwork"
 )
 
 var (
@@ -16,7 +16,7 @@ var (
 )
 
 func handleErr(err error) error {
-	var vErr model.ValidationError
+	var vErr seedwork.ValidationError
 
 	if errors.As(err, &vErr) {
 		br := errdetails.BadRequest{
@@ -40,7 +40,7 @@ func handleErr(err error) error {
 		return st.Err()
 	}
 
-	var e model.Error
+	var e seedwork.Error
 	if errors.As(err, &e) {
 		return status.Error(codes.FailedPrecondition, e.Error())
 	}

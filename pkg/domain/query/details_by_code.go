@@ -9,6 +9,7 @@ import (
 
 	"github.com/opencars/schema"
 	"github.com/opencars/schema/vehicle"
+	"github.com/opencars/seedwork"
 	"github.com/opencars/translit"
 
 	"github.com/opencars/edrmvs/pkg/domain/model"
@@ -28,16 +29,16 @@ func (q *DetailsByCode) Validate() error {
 	return validation.ValidateStruct(q,
 		validation.Field(
 			&q.UserID,
-			validation.Required.Error(model.Required),
+			validation.Required.Error(seedwork.Required),
 		),
 		validation.Field(
 			&q.TokenID,
-			validation.Required.Error(model.Required),
+			validation.Required.Error(seedwork.Required),
 		),
 		validation.Field(
 			&q.Code,
-			validation.Required.Error(model.Required),
-			validation.Length(9, 9).Error(model.Invalid),
+			validation.Required.Error(seedwork.Required),
+			validation.Length(9, 9).Error(seedwork.Invalid),
 		),
 	)
 }

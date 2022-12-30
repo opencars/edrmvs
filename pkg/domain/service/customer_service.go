@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/opencars/schema"
+	"github.com/opencars/seedwork"
 
 	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/model"
@@ -25,7 +26,7 @@ func NewCustomerService(s domain.RegistrationStore, p domain.RegistrationProvide
 }
 
 func (s *CustomerService) ListByNumber(ctx context.Context, q *query.ListByNumber) ([]model.Registration, error) {
-	if err := query.Process(q); err != nil {
+	if err := seedwork.ProcessQuery(q); err != nil {
 		return nil, err
 	}
 
@@ -42,7 +43,7 @@ func (s *CustomerService) ListByNumber(ctx context.Context, q *query.ListByNumbe
 }
 
 func (s *CustomerService) ListByVIN(ctx context.Context, q *query.ListByVIN, v2 bool) ([]model.Registration, error) {
-	if err := query.Process(q); err != nil {
+	if err := seedwork.ProcessQuery(q); err != nil {
 		return nil, err
 	}
 
@@ -86,7 +87,7 @@ func (s *CustomerService) ListByVIN(ctx context.Context, q *query.ListByVIN, v2 
 }
 
 func (s *CustomerService) DetailsByCode(ctx context.Context, q *query.DetailsByCode) (*model.Registration, error) {
-	if err := query.Process(q); err != nil {
+	if err := seedwork.ProcessQuery(q); err != nil {
 		return nil, err
 	}
 

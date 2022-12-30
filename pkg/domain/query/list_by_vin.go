@@ -11,6 +11,7 @@ import (
 
 	"github.com/opencars/schema"
 	"github.com/opencars/schema/vehicle"
+	"github.com/opencars/seedwork"
 	"github.com/opencars/translit"
 
 	"github.com/opencars/edrmvs/pkg/domain/model"
@@ -66,24 +67,24 @@ func (q *ListByVIN) Validate() error {
 	return validation.ValidateStruct(q,
 		validation.Field(
 			&q.UserID,
-			validation.Required.Error(model.Required),
+			validation.Required.Error(seedwork.Required),
 		),
 		validation.Field(
 			&q.TokenID,
-			validation.Required.Error(model.Required),
+			validation.Required.Error(seedwork.Required),
 		),
 		validation.Field(
 			&q.VIN,
-			validation.Required.Error(model.Required),
-			validation.Length(6, 18).Error(model.Invalid),
+			validation.Required.Error(seedwork.Required),
+			validation.Length(6, 18).Error(seedwork.Invalid),
 		),
 		validation.Field(
 			&q.Limit,
-			is.Int.Error(model.IsNotInreger),
+			is.Int.Error(seedwork.IsNotInreger),
 		),
 		validation.Field(
 			&q.Offset,
-			is.Int.Error(model.IsNotInreger),
+			is.Int.Error(seedwork.IsNotInreger),
 		),
 	)
 }

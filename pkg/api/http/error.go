@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/opencars/httputil"
+	"github.com/opencars/seedwork"
 
 	"github.com/opencars/edrmvs/pkg/domain/model"
 )
@@ -16,7 +17,7 @@ func handleErr(err error) error {
 		return httputil.NewError(http.StatusBadRequest, e.Error())
 	}
 
-	var vErr model.ValidationError
+	var vErr seedwork.ValidationError
 	if errors.As(err, &vErr) {
 		errMessage := make([]string, 0)
 		for k, vv := range vErr.Messages {

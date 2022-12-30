@@ -6,6 +6,7 @@ import (
 	"github.com/opencars/edrmvs/pkg/domain"
 	"github.com/opencars/edrmvs/pkg/domain/model"
 	"github.com/opencars/edrmvs/pkg/domain/query"
+	"github.com/opencars/seedwork"
 )
 
 type InternalService struct {
@@ -21,7 +22,7 @@ func NewInternalService(s domain.RegistrationStore, p domain.RegistrationProvide
 }
 
 func (s *InternalService) ListByNumber(ctx context.Context, q *query.ListWithNumberByInternal) ([]model.Registration, error) {
-	if err := query.Process(q); err != nil {
+	if err := seedwork.ProcessQuery(q); err != nil {
 		return nil, err
 	}
 
@@ -29,7 +30,7 @@ func (s *InternalService) ListByNumber(ctx context.Context, q *query.ListWithNum
 }
 
 func (s *InternalService) ListByVIN(ctx context.Context, q *query.ListWithVINByInternal) ([]model.Registration, error) {
-	if err := query.Process(q); err != nil {
+	if err := seedwork.ProcessQuery(q); err != nil {
 		return nil, err
 	}
 
@@ -61,7 +62,7 @@ func (s *InternalService) ListByVIN(ctx context.Context, q *query.ListWithVINByI
 }
 
 func (s *InternalService) DetailsByCode(ctx context.Context, q *query.DetailsWithCodeByInternal) (*model.Registration, error) {
-	if err := query.Process(q); err != nil {
+	if err := seedwork.ProcessQuery(q); err != nil {
 		return nil, err
 	}
 
