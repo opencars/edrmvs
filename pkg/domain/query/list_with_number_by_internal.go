@@ -42,7 +42,7 @@ func (q *ListWithNumberByInternal) Validate() error {
 		validation.Field(
 			&q.Number,
 			validation.Required.Error("required"),
-			validation.Length(6, 18).Error("invalid"),
+			validation.Length(2, 18).Error("invalid"),
 		),
 		validation.Field(
 			&q.Limit,
