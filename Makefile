@@ -1,5 +1,5 @@
 .PHONY: default build clean
-APPS        := http-server grpc-server extractor
+APPS        := server extractor
 BLDDIR      ?= bin
 VERSION     ?= $(shell cat VERSION)
 IMPORT_BASE := github.com/opencars/edrmvs

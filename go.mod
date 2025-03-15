@@ -1,6 +1,6 @@
 module github.com/opencars/edrmvs
 
-go 1.19
+go 1.23
 
 require (
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
@@ -15,6 +15,7 @@ require (
 	github.com/opencars/seedwork v0.0.2
 	github.com/opencars/translit v0.1.2
 	github.com/stretchr/testify v1.7.0
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
